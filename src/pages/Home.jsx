@@ -40,7 +40,7 @@ const Home = () => {
       } else {
         setError("No results found.");
       }
-    } catch (err) {
+    } catch {
       setError("Failed to fetch movies. Please try again later.");
     } finally {
       setLoading(false);
