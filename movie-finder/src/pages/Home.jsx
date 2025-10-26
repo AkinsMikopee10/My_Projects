@@ -66,7 +66,7 @@ const Home = () => {
       {error && <p className="text-center text-red-500 mt-4">{error}</p>}
 
       {/* Movie Results Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mt-8">
+      <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mt-10">
         {movies.map((movie, index) => (
           <MovieCard key={index} movie={movie} />
         ))}
