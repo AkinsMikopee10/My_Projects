@@ -43,6 +43,8 @@ npm run dev
 
 Deployment
 
-Deployed on Vercel (link to add later)
+- **Live Demo:** - (https://movie-finder-alpha-six.vercel.app)
+- 💻 **GitHub Repo:** - (https://github.com/AkinsMikopee10/My_Projects/tree/main/movie-finder)
+- **Figma Design:** - (https://www.figma.com/design/Zych1FRsPEKGlHGUsWIn2k/Movie-Finder-App--UI-Design-?node-id=0-1&p=f&t=pF9GkT9kcP0C0ePk-0)
 
-Built by Michael — Junior Frontend Developer.
+Built by Michael Akinyemi — Junior Frontend Developer.
