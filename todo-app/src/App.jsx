@@ -4,15 +4,10 @@ import TodoList from "./components/TodoList";
 
 const App = () => {
   // State to hold all todos
-  const [todos, setTodos] = useState([]);
-
-  // Load saved todos when app first mounts
-  useEffect(() => {
-    const savedTodos = JSON.parse(localStorage.getItem("todos"));
-    if (savedTodos) {
-      setTodos(savedTodos);
-    }
-  }, []);
+  const [todos, setTodos] = useState(() => {
+    const saved = localStorage.getItem("todos");
+    return saved ? JSON.parse(saved) : [];
+  });
 
   // save todos every time they change
   useEffect(() => {
