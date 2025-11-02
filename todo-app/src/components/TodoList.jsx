@@ -1,6 +1,6 @@
 import TodoItem from "./TodoItem";
 
-const TodoList = ({ todos, deleteTodo, toggleComplete }) => {
+const TodoList = ({ todos, deleteTodo, toggleComplete, editTodo }) => {
   return (
     <div className="w-full max-w-md bg-white p-4 rounded-lg shadow">
       {todos.length === 0 ? (
@@ -15,6 +15,7 @@ const TodoList = ({ todos, deleteTodo, toggleComplete }) => {
               todo={todo}
               deleteTodo={deleteTodo} //pass function to TodoItem
               toggleComplete={toggleComplete}
+              editTodo={editTodo}
             />
           ))}
         </ul>
