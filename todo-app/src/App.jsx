@@ -15,6 +15,7 @@ const App = () => {
     const todoItem = {
       id: Date.now(), //unique ID
       text: newTodo,
+      completed: false,
     };
 
     // add to the list
@@ -27,6 +28,15 @@ const App = () => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
 
+  // function to toggle completed status
+  const toggleComplete = (id) => {
+    setTodos(
+      todos.map((todo) =>
+        todo.id === id ? { ...todo, completed: !todo.completed } : todo
+      )
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col item-center p-6">
       <h1 className="text-3xl font-bold text-blue-600 mb-6">📝 My Todo List</h1>
@@ -35,7 +45,11 @@ const App = () => {
       <TodoInput addTodo={addTodo} />
 
       {/* todo list section */}
-      <TodoList todos={todos} deleteTodo={deleteTodo} />
+      <TodoList
+        todos={todos}
+        deleteTodo={deleteTodo}
+        toggleComplete={toggleComplete}
+      />
     </div>
   );
 };
