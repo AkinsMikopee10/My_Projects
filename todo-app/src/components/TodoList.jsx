@@ -1,4 +1,6 @@
-const TodoList = ({ todos }) => {
+import TodoItem from "./TodoItem";
+
+const TodoList = ({ todos, deleteTodo }) => {
   return (
     <div className="w-full max-w-md bg-white p-4 rounded-lg shadow">
       {todos.length === 0 ? (
@@ -8,12 +10,11 @@ const TodoList = ({ todos }) => {
       ) : (
         <ul className="space-y-2">
           {todos.map((todo) => (
-            <li
+            <TodoItem
               key={todo.id}
-              className="p-2 border-b last:border-none text-gray-700"
-            >
-              {todo.text}
-            </li>
+              todo={todo}
+              deleteTodo={deleteTodo} //pass function to TodoItem
+            />
           ))}
         </ul>
       )}
