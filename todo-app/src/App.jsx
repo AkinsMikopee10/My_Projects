@@ -21,6 +21,12 @@ const App = () => {
     setTodos([todoItem, ...todos]);
   };
 
+  // function to delete a todo item by ID
+  const deleteTodo = (id) => {
+    // filter out the one we want to remove
+    setTodos(todos.filter((todo) => todo.id !== id));
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col item-center p-6">
       <h1 className="text-3xl font-bold text-blue-600 mb-6">📝 My Todo List</h1>
@@ -29,7 +35,7 @@ const App = () => {
       <TodoInput addTodo={addTodo} />
 
       {/* todo list section */}
-      <TodoList todos={todos} />
+      <TodoList todos={todos} deleteTodo={deleteTodo} />
     </div>
   );
 };
