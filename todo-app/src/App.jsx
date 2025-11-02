@@ -37,6 +37,13 @@ const App = () => {
     );
   };
 
+  // function to edit todo text
+  const editTodo = (id, newText) => {
+    setTodos(
+      todos.map((todo) => (todo.id === id ? { ...todo, text: newText } : todo))
+    );
+  };
+
   return (
     <div className="min-h-screen bg-gray-100 flex flex-col item-center p-6">
       <h1 className="text-3xl font-bold text-blue-600 mb-6">📝 My Todo List</h1>
@@ -49,6 +56,7 @@ const App = () => {
         todos={todos}
         deleteTodo={deleteTodo}
         toggleComplete={toggleComplete}
+        editTodo={editTodo}
       />
     </div>
   );
