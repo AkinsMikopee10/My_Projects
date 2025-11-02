@@ -57,7 +57,7 @@ const TodoItem = ({ todo, deleteTodo, toggleComplete, editTodo }) => {
         ) : (
           <button
             onClick={() => setIsEditing(true)}
-            className="bg-blue-500 hover:bg-blue-700 text-white font-medium border py-4 px-2 rounded-3xl"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-medium border px-4 py-2 rounded-3xl"
           >
             Edit
           </button>
