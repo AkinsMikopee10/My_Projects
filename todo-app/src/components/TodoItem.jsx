@@ -1,8 +1,23 @@
-const TodoItem = ({ todo, deleteTodo }) => {
+const TodoItem = ({ todo, deleteTodo, toggleComplete }) => {
   return (
     <li className="flex justify-between items-center p-2 border-b last:border-none">
-      {/* todo text */}
-      <span className="text-gray-700">{todo.text}</span>
+      {/* Left side: checkbox + text */}
+      <div className="flex items-center space-x-2">
+        <input
+          type="checkbox"
+          checked={todo.completed}
+          onChange={() => toggleComplete(todo.id)}
+          className="w-4 h-4 accent-blue-500 cursor-pointer"
+        />
+        {/* todo text */}
+        <span
+          className={`${
+            todo.completed ? "line-through text-gray-400" : "text-gray-700"
+          }`}
+        >
+          {todo.text}
+        </span>
+      </div>
 
       {/* delete button */}
       <button
