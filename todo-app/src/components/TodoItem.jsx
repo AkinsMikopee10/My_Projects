@@ -1,8 +1,19 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const TodoItem = ({ todo, deleteTodo, toggleComplete, editTodo }) => {
+  // Local state for editing mode and the input value
   const [isEditing, setIsEditing] = useState(false);
   const [editedText, setEditedText] = useState(todo.text);
+
+  // Handle key events for edit mode
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      handleEditSubmit(e);
+    } else if (e.key === "Escape") {
+      setIsEditing(false);
+      setEditedText(todo.text); // revert to old text
+    }
+  };
 
   const handleEditSubmit = (e) => {
     e.preventDefault();
@@ -11,10 +22,22 @@ const TodoItem = ({ todo, deleteTodo, toggleComplete, editTodo }) => {
     setIsEditing(false);
   };
 
+  // Add a subtle animation for completed items
+  useEffect(() => {
+    if (todo.completed) {
+      const timer = setTimeout(() => {}, 300);
+      return () => clearTimeout(timer);
+    }
+  }, [todo.completed]);
+
   return (
-    <li className="flex justify-between items-center p-2 border-b last:border-none">
+    <li
+      className={`flex justify-between items-center p-2 border-b last:border-none transition-all duration-300 ${
+        todo.completed ? "bg-green-50" : "hover:bg-gray-50"
+      }`}
+    >
       {/* Left side: checkbox + text */}
-      <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2 w-full">
         <input
           type="checkbox"
           checked={todo.completed}
@@ -22,22 +45,23 @@ const TodoItem = ({ todo, deleteTodo, toggleComplete, editTodo }) => {
           className="w-4 h-4 accent-blue-500 cursor-pointer"
         />
 
-        {/* Show input if editing, else show todo text */}
         {isEditing ? (
           <form onSubmit={handleEditSubmit} className="flex-grow">
             <input
               type="text"
               value={editedText}
               onChange={(e) => setEditedText(e.target.value)}
+              onKeyDown={handleKeyDown}
               autoFocus
               className="w-full border rounded-md p-1 focus:ring-2 focus:ring-blue-400"
             />
           </form>
         ) : (
-          /* Right side: edit + delete */
           <span
-            className={`flex-grow ${
-              todo.completed ? "line-through text-gray-400" : "text-gray-700"
+            className={`flex-grow break-words ${
+              todo.completed
+                ? "line-through text-gray-400 transition-all duration-300"
+                : "text-gray-700"
             }`}
           >
             {todo.text}
@@ -45,7 +69,7 @@ const TodoItem = ({ todo, deleteTodo, toggleComplete, editTodo }) => {
         )}
       </div>
 
-      {/* Right side: edit + delete */}
+      {/* Right side: edit + delete buttons */}
       <div className="flex items-center space-x-2">
         {isEditing ? (
           <button
@@ -63,10 +87,9 @@ const TodoItem = ({ todo, deleteTodo, toggleComplete, editTodo }) => {
           </button>
         )}
 
-        {/* delete button */}
         <button
           onClick={() => deleteTodo(todo.id)}
-          className="bg-red-500 hover:bg-red-700 text-white font-medium border px-4 py-2 rounded-3xl "
+          className="bg-red-500 hover:bg-red-700 text-white font-medium border px-4 py-2 rounded-3xl"
         >
           Delete
         </button>

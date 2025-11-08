@@ -63,53 +63,45 @@ const App = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col item-center p-6">
-      <h1 className="text-3xl font-bold text-blue-600 mb-6">📝 My Todo List</h1>
+    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex flex-col items-center p-6 transition-all">
+      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+        <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6">
+          📝 My Todo List
+        </h1>
 
-      {/* input section */}
-      <TodoInput addTodo={addTodo} />
+        {/* input section */}
+        <TodoInput addTodo={addTodo} />
 
-      {/* ✅ Filter Buttons */}
-      <div className="flex gap-2 mb-4">
-        <button
-          onClick={() => setFilter("all")}
-          className={`px-4 py-1 rounded-md ${
-            filter === "all"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          } `}
-        >
-          All
-        </button>
-        <button
-          onClick={() => setFilter("active")}
-          className={`px-4 py-1 rounded-md ${
-            filter === "active"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          Active
-        </button>
-        <button
-          onClick={() => setFilter("completed")}
-          className={`px-4 py-1 rounded-md ${
-            filter === "completed"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-200 hover:bg-gray-300"
-          }`}
-        >
-          Completed
-        </button>
+        {/* ✅ Filter Buttons */}
+        <div className="flex justify-center gap-2 mt-4 mb-6">
+          {["all", "active", "completed"].map((f) => (
+            <button
+              key={f}
+              onClick={() => setFilter(f)}
+              className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
+                filter === f
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+              } `}
+            >
+              {f.charAt(0).toUpperCase() + f.slice(1)}
+            </button>
+          ))}
+        </div>
+
+        {/* todo list section */}
+        <TodoList
+          todos={filteredTodos}
+          deleteTodo={deleteTodo}
+          toggleComplete={toggleComplete}
+          editTodo={editTodo}
+        />
+
+        {/* Optional Footer */}
+        <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-6">
+          Built using React + TailwindCSS
+        </p>
       </div>
-
-      {/* todo list section */}
-      <TodoList
-        todos={filteredTodos}
-        deleteTodo={deleteTodo}
-        toggleComplete={toggleComplete}
-        editTodo={editTodo}
-      />
     </div>
   );
 };
