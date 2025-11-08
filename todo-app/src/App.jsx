@@ -12,7 +12,7 @@ const App = () => {
   // Store filter type (all, active, completed)
   const [filter, setFilter] = useState("all");
 
-  // save todos every time they change
+  // Save todos to localStorage whenever they change
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
@@ -55,7 +55,7 @@ const App = () => {
     );
   };
 
-  // Filter logic
+  // Apply filter
   const filteredTodos = todos.filter((todo) => {
     if (filter === "active") return !todo.completed;
     if (filter === "completed") return todo.completed;
@@ -63,9 +63,9 @@ const App = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-900 flex flex-col items-center p-6 transition-all">
-      <div className="w-full max-w-md bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
-        <h1 className="text-3xl font-bold text-blue-600 dark:text-blue-400 mb-6">
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center p-6">
+      <div className="w-full max-w-md bg-white rounded-2xl shadow-lg p-6 space-y-6">
+        <h1 className="text-3xl font-bold text-center text-blue-600  mb-6">
           📝 My Todo List
         </h1>
 
@@ -81,7 +81,7 @@ const App = () => {
               className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors ${
                 filter === f
                   ? "bg-blue-500 text-white"
-                  : "bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600"
+                  : "bg-gray-200 hover:bg-gray-300"
               } `}
             >
               {f.charAt(0).toUpperCase() + f.slice(1)}
@@ -98,7 +98,7 @@ const App = () => {
         />
 
         {/* Optional Footer */}
-        <p className="text-center text-xs text-gray-500 dark:text-gray-400 mt-6">
+        <p className="text-center text-xs text-gray-500 mt-6">
           Built using React + TailwindCSS
         </p>
       </div>
