@@ -46,8 +46,35 @@ const App = () => {
     setCity(newCity);
   };
 
+  // 🌈 Function to pick gradient color based on weather type
+  const getBackground = (condition) => {
+    switch (condition) {
+      case "Clear":
+        return "from-yellow-400 via-orange-400 to-pink-400";
+      case "Clouds":
+        return "from-gray-400 via-gray-500 to-gray-600";
+      case "Rain":
+        return "from-blue-500 via-blue-600 to-gray-700";
+      case "Thunderstorm":
+        return "from-indigo-700 via-purple-700 to-gray-800";
+      case "Snow":
+        return "from-blue-200 via-white to-blue-300";
+      case "Mist":
+      case "Fog":
+        return "from-gray-300 via-gray-400 to-gray-500";
+      default:
+        return "from-blue-400 via-cyan-400 to-sky-500";
+    }
+  };
+
+  const bgGradient = weather
+    ? getBackground(weather.condition)
+    : "from-blue-400 to-cyan-400";
+
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-b from-blue-400 to-cyan-200 p-4">
+    <div
+      className={`min-h-screen flex flex-col items-center justify-center bg-gradient-to-b ${bgGradient} p-4 transition-all duration-700`}
+    >
       <SearchBar onSearch={handleSearch} />
 
       {loading && <Loader />}
