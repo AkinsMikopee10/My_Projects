@@ -73,19 +73,21 @@ const App = () => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col items-center justify-start sm:justify-center bg-gradient-to-b ${bgGradient} px-4 py-8 sm:py-12 transition-all duration-700`}
+      className={`min-h-screen flex flex-col items-center justify-start sm:justify-center bg-gradient-to-b ${bgGradient} px-4 sm:px-6 md:px-10 py-8 sm:py-12 transition-all duration-700`}
     >
-      <SearchBar onSearch={handleSearch} />
+      <div className="w-full max-w-2xl flex flex-col items-center gap-8">
+        <SearchBar onSearch={handleSearch} />
 
-      {loading && <Loader />}
+        {loading && <Loader />}
 
-      {error && (
-        <div className="text-red-600 bg-white/60 px-4 py-2 rounded-xl mt-4">
-          {error}
-        </div>
-      )}
+        {error && (
+          <div className="text-red-700 bg-white/70 text-center px-4 py-2 rounded-xl mt-4 w-full sm:w-auto">
+            {error}
+          </div>
+        )}
 
-      {!loading && !error && <WeatherCard weather={weather} />}
+        {!loading && !error && <WeatherCard weather={weather} />}
+      </div>
     </div>
   );
 };
