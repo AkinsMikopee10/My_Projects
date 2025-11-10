@@ -10,6 +10,7 @@ const RecipeCard = ({ recipe, toggleFavorite, isFavorite }) => {
       >
         ♥
       </button>
+
       <img
         src={recipe.strMealThumb}
         alt={recipe.strMeal}

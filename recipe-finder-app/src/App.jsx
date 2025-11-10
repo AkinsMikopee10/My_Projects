@@ -8,6 +8,7 @@ const App = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [favorites, setFavorites] = useState([]);
+  const [activeFilter, setActiveFilter] = useState(null);
 
   // Meal-type filter categories
   const mealTypes = ["Breakfast", "Seafood", "Beef", "Chicken", "Dessert"];
@@ -91,7 +92,11 @@ const App = () => {
           {mealTypes.map((type) => (
             <button
               key={type}
-              className="px-4 py-2 bg-gray-200 rounded hover:bg-gray-300 transition"
+              className={`px-4 py-2 rounded transition ${
+                activeFilter === type
+                  ? "bg-blue-500 text-white"
+                  : "bg-gray-200 text-gray-800 hover:bg-gray-300"
+              }`}
               onClick={() => handleFilter(type)}
             >
               {type}
@@ -99,8 +104,29 @@ const App = () => {
           ))}
         </div>
 
+        {/* Favorites Section */}
+        {favorites.length > 0 && (
+          <div className="mt-8">
+            <h2 className="text-xl font-bold mb-4">Favorites</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+              {favorites.map((recipe) => (
+                <RecipeCard
+                  key={recipe.idMeal}
+                  recipe={recipe}
+                  toggleFavorite={toggleFavorite}
+                  isFavorite={true}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Loading & error */}
-        {loading && <p className="text-center text-gray-700">Loading...</p>}
+        {loading && (
+          <div className="flex justify-center mt-6">
+            <div className="w-10 h-10 border-4 border-blue-500 border-dashed rounded-full animate-spin"></div>
+          </div>
+        )}
         {error && <p className="text-center text-red-500">{error}</p>}
 
         {/* Recipe grid */}
