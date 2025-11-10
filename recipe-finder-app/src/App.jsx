@@ -4,10 +4,29 @@ import RecipeCard from "./components/RecipeCard";
 
 const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [recipes, setRecipes] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
-  const handleSearch = () => {
-    console.log("Searching for:", searchTerm);
-    // API call will go here
+  const handleSearch = async () => {
+    if (!searchTerm) return;
+    setLoading(true);
+    setError("");
+    try {
+      const res = await fetch(
+        `https://www.themealdb.com/api/json/v1/1/filter.php?i=${searchTerm}`
+      );
+      const data = await res.json();
+      if (data.meals) {
+        setRecipes(data.meals);
+      } else {
+        setRecipes([]);
+        setError("No recipes found.");
+      }
+    } catch (err) {
+      setError("Failed to fetch recipes. Try again.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -22,7 +41,15 @@ const App = () => {
           setSearchTerm={setSearchTerm}
           handleSearch={handleSearch}
         />
-        <RecipeCard />
+
+        {loading && <p className="text-center text-gray-700">Loading...</p>}
+        {error && <p className="text-center text-red-500">{error}</p>}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
+          {recipes.map((recipe) => (
+            <RecipeCard key={recipe.idMeal} recipe={recipe} />
+          ))}
+        </div>
       </main>
     </div>
   );
