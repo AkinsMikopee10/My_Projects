@@ -16,7 +16,7 @@ const SearchBar = ({ onSearch }) => {
       onSubmit={handleSubmit}
       className="w-full max-w-md flex flex-col sm:flex-row items-center gap-3 bg-white/30 backdrop-blur-md p-3 sm:p-2 rounded-2xl shadow-lg"
     >
-      <div className="flex items-center w-full sm:w-auto gap-2 sm:gap-3">
+      <div className="flex items-center w-full gap-2 sm:gap-3">
         <Search className="text-white w-6 h-6" />
         <input
           type="text"
