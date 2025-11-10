@@ -73,7 +73,7 @@ const App = () => {
 
   return (
     <div
-      className={`min-h-screen flex flex-col items-center justify-center bg-gradient-to-b ${bgGradient} p-4 transition-all duration-700`}
+      className={`min-h-screen flex flex-col items-center justify-start sm:justify-center bg-gradient-to-b ${bgGradient} px-4 py-8 sm:py-12 transition-all duration-700`}
     >
       <SearchBar onSearch={handleSearch} />
 

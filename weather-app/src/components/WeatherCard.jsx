@@ -28,7 +28,7 @@ const WeatherCard = ({ weather }) => {
   };
 
   return (
-    <div className="mt-10 bg-white/20 backdrop-blur-lg p-8 rounded-2xl shadow-lg text-center text-white w-full max-w-sm transition-all duration-300">
+    <div className="mt-10 bg-white/20 backdrop-blur-lg p-6 sm:p-8 rounded-2xl shadow-lg text-center text-white w-full max-w-xs sm:max-w-sm md:max-w-md transition-all duration-300">
       <h2 className="text-2xl font-semibold mb-2 tracking-wide">{city}</h2>
 
       <div className="flex justify-center mb-4">
