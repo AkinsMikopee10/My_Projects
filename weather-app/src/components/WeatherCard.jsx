@@ -12,7 +12,7 @@ import {
 const WeatherCard = ({ weather }) => {
   if (!weather) return null;
 
-  const { city, temp, condition, humidity, wind } = weather;
+  const { city, condition, humidity, wind } = weather;
 
   const getWeatherIcon = (condition) => {
     const icons = {
