@@ -1,36 +1,35 @@
-import { useState } from "react";
-import TaskList from "./components/TaskList";
-import FocusTimer from "./components/FocusTimer";
-import StatsCard from "./components/StatsCard";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-const App = () => {
-  const [tasks, setTasks] = useState(
-    () => JSON.parse(localStorage.getItem("tasks")) || []
-  );
-  const [focusTime, setFocusTime] = useState(
-    () => Number(localStorage.getItem("focusTime")) || 0
-  );
-
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  useEffect(() => {
-    localStorage.setItem("focusTime", String(focusTime));
-  }, [focusTime]);
+function App() {
+  const [count, setCount] = useState(0)
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <header className="mb-4 text-center">
-        <h1 className="text-2xl font-bold">DailyFocus</h1>
-      </header>
-      <main className="space-y-6">
-        <TaskList tasks={tasks} setTasks={setTasks} />
-        <FocusTimer setFocusTime={setFocusTime} />
-        <StatsCard tasks={tasks} focusTime={focusTime} />
-      </main>
-    </div>
-  );
-};
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
+}
 
-export default App;
+export default App
