@@ -1,5 +1,6 @@
 import { getPoster } from "../utils/imageUrl";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 /**
  * MovieCard Component
@@ -11,7 +12,13 @@ import { Link } from "react-router-dom";
 const MovieCard = ({ movie }) => {
   return (
     <Link to={`/movie/${movie.id}`}>
-      <div className=" bg-white rounded-xl shadow-md hover:shadow-xl transition transform hover:-translate-y-1 p-3">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 }}
+        whileHover={{ scale: 1.05 }}
+        className="bg-white rounded-xl shadow-md hover:shadow-xl transition p-3"
+      >
         <img
           src={getPoster(movie.poster_path)}
           alt={movie.title}
@@ -25,7 +32,7 @@ const MovieCard = ({ movie }) => {
         <p className="text-yellow-500 text-sm">
           ⭐ {movie.vote_average.toFixed(1)}
         </p>
-      </div>
+      </motion.div>
     </Link>
   );
 };

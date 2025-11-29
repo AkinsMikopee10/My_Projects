@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { tmdb } from "../api/tmdb";
 import MovieCard from "../components/MovieCard";
+import Loader from "../components/Loader";
 
 const Home = () => {
   const [trending, setTrending] = useState([]);
@@ -22,11 +23,19 @@ const Home = () => {
     <div className="max-w-6xl mx-auto p-4">
       {/* Trending Section */}
       <h1 className="text-3xl font-bold mb-6 text-blue-600">Trending Movies</h1>
-      <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 mb-12">
-        {trending.map((movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
-      </div>
+      {trending.length === 0 ? (
+        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {Array.from({ length: 10 }).map((_, i) => (
+            <Loader key={i} />
+          ))}
+        </div>
+      ) : (
+        <div className="grid gap-6 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+          {trending.map((movie) => (
+            <MovieCard key={movie.id} movie={movie} />
+          ))}
+        </div>
+      )}
 
       {/* Top Rated Section */}
       <h1 className="text-3xl font-bold mb-6 text-blue-600">
