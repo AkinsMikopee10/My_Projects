@@ -1,24 +1,15 @@
-// src/services/tmdb.js
-const BASE_URL = "https://api.themoviedb.org/3";
+const API_BASE = "https://api.themoviedb.org/3";
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_KEY;
 
-const searchMoviesTMDB = async (query) => {
-  try {
-    const response = await fetch(
-      `${BASE_URL}/search/movie?api_key=${
-        import.meta.env.VITE_TMDB_KEY
-      }&query=${encodeURIComponent(query)}`
-    );
+/**
+ * TMDB API Utility
+ * ----------------
+ * Handles requests to TMDB with error handling.
+ */
+export async function tmdb(endpoint) {
+  const res = await fetch(`${API_BASE}${endpoint}?api_key=${TMDB_API_KEY}`);
 
-    if (!response.ok) {
-      throw new Error("TMDB API error");
-    }
+  if (!res.ok) throw new Error("Failed to fetch TMDB");
 
-    const data = await response.json();
-    return data.results || [];
-  } catch (error) {
-    console.error("TMDB Fetch Error:", error);
-    return [];
-  }
-};
-
-export default searchMoviesTMDB;
+  return res.json();
+}
