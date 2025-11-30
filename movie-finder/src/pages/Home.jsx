@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { tmdb } from "../api/tmdb";
 import MovieCard from "../components/MovieCard";
-import { getPoster, getBackdrop } from "../utils/imageUrl";
+import { getBackdrop } from "../utils/imageUrl";
 import Loader from "../components/Loader";
 
 const Home = () => {
