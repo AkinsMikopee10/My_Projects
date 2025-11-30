@@ -35,11 +35,11 @@ CineScope is a modern movie discovery app built with React and Vite. It connects
 
 src/
 
-- api/ # TMDB API utility
-- components/ # Reusable UI components (MovieCard, Loader, Navbar)
-- pages/ # Page components (Home, Search, Explore, Watchlist, MovieDetails)
-- utils/ # Helpers (debounce, imageUrl)
-- App.jsx # Main app with routing
+- **api/** # TMDB API utility
+- **components/** # Reusable UI components (MovieCard, Loader, Navbar)
+- **pages/** # Page components (Home, Search, Explore, Watchlist, MovieDetails)
+- **utils/** # Helpers (debounce, imageUrl)
+- **App.jsx** # Main app with routing
 
 ## Setup
 
