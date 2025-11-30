@@ -34,30 +34,32 @@ CineScope is a modern movie discovery app built with React and Vite. It connects
 ## Project Structure
 
 src/
-|-- api/ # TMDB API utility
-|-- components/ # Reusable UI components (MovieCard, Loader, Navbar)
-|-- pages/ # Page components (Home, Search, Explore, Watchlist, MovieDetails)
-|-- utils/ # Helpers (debounce, imageUrl)
-|-- App.jsx # Main app with routing
+
+- api/ # TMDB API utility
+- components/ # Reusable UI components (MovieCard, Loader, Navbar)
+- pages/ # Page components (Home, Search, Explore, Watchlist, MovieDetails)
+- utils/ # Helpers (debounce, imageUrl)
+- App.jsx # Main app with routing
 
 ## Setup
 
-1. Clone the repo  
-   git clone https://github.com/AkinsMikopee10/My_Projects.git
-   cd My_Projects
-   cd movie-finder
+1. Clone the repo
+
+- git clone https://github.com/AkinsMikopee10/My_Projects.git
+- cd My_Projects
+- cd movie-finder
 
 2. Install dependencies
 
-npm install
+   npm install
 
-1. Add TMDB API key in a .env file
+3. Add TMDB API key in a .env file
 
-VITE_TMDB_API_KEY=your_api_key
+   VITE_TMDB_API_KEY=your_api_key
 
 4. Run locally
 
-npm run dev
+   npm run dev
 
 ## Deployment
 
