@@ -19,7 +19,7 @@ const MovieCard = ({ movie }) => {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.25 }}
         whileHover={{ scale: 1.02 }}
-        className="relative rounded-xl overflow-hidden bg-slate-800/60 border border-slate-700 shadow-lg hover:shadow-2xl"
+        className="relative rounded-xl overflow-hidden bg-white dark:bg-slate-800/60 border border-slate-200 dark:border-slate-700 shadow-lg hover:shadow-2xl"
       >
         <img
           src={getPoster(movie.poster_path)}
