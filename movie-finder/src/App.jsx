@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import Home from "./pages/Home";
 import Search from "./pages/Search";
@@ -8,16 +8,19 @@ import Explore from "./pages/Explore";
 
 const App = () => {
   return (
-    <Router>
-      <Navbar />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/search" element={<Search />} />
-        <Route path="/movie/:id" element={<MovieDetails />} />
-        <Route path="/watchlist" element={<Watchlist />} />
-        <Route path="/explore" element={<Explore />} />
-      </Routes>
-    </Router>
+    <BrowserRouter>
+      {/* Global wrapper so dark mode applies consistently */}
+      <div className="min-h-screen bg-white dark:bg-slate-900 text-slate-900 dark:text-slate-200">
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/movie/:id" element={<MovieDetails />} />
+          <Route path="/watchlist" element={<Watchlist />} />
+          <Route path="/explore" element={<Explore />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   );
 };
 
