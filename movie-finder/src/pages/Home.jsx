@@ -11,7 +11,6 @@ const Home = () => {
   const [upcoming, setUpcoming] = useState([]);
 
   useEffect(() => {
-    // Fetch trending movies
     tmdb("/trending/movie/day").then((data) => {
       setTrending(data.results || []);
       const withBackdrop =
@@ -20,10 +19,7 @@ const Home = () => {
       setFeatured(withBackdrop || null);
     });
 
-    // Fetch top rated movies
     tmdb("/movie/top_rated").then((data) => setTopRated(data.results || []));
-
-    // Fetch upcoming movies
     tmdb("/movie/upcoming").then((data) => setUpcoming(data.results || []));
   }, []);
 
@@ -31,7 +27,7 @@ const Home = () => {
     <div className="max-w-7xl mx-auto px-4 md:px-6 lg:px-8 py-6">
       {/* Hero */}
       {featured && (
-        <section className="relative mb-10 rounded-2xl overflow-hidden border border-slate-700">
+        <section className="relative mb-10 rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-700">
           <img
             src={getBackdrop(featured.backdrop_path)}
             alt={featured.title}
@@ -39,10 +35,10 @@ const Home = () => {
           />
           <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent" />
           <div className="absolute inset-0 p-6 md:p-10 flex flex-col justify-end">
-            <h1 className="text-2xl md:text-4xl font-bold text-white max-w-3xl">
+            <h1 className="text-2xl md:text-4xl font-bold text-slate-900 dark:text-white max-w-3xl">
               {featured.title}
             </h1>
-            <p className="text-slate-200 mt-3 line-clamp-3 max-w-3xl">
+            <p className="text-slate-700 dark:text-slate-200 mt-3 line-clamp-3 max-w-3xl">
               {featured.overview}
             </p>
             <div className="mt-4 flex gap-3">
@@ -54,7 +50,7 @@ const Home = () => {
               </a>
               <a
                 href={`/movie/${featured.id}`}
-                className="inline-flex items-center px-4 py-2 rounded-lg bg-slate-800 text-white border border-slate-700 hover:bg-slate-700"
+                className="inline-flex items-center px-4 py-2 rounded-lg bg-slate-100 dark:bg-slate-800 text-slate-900 dark:text-white border border-slate-300 dark:border-slate-700 hover:bg-slate-200 dark:hover:bg-slate-700"
               >
                 View details
               </a>
@@ -62,9 +58,10 @@ const Home = () => {
           </div>
         </section>
       )}
+
       {/* Trending */}
       <section id="trending" className="mb-8">
-        <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">
+        <h2 className="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-4">
           Trending now
         </h2>
         <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -76,7 +73,7 @@ const Home = () => {
 
       {/* Top Rated */}
       <section id="top-rated" className="mb-8">
-        <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">
+        <h2 className="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-4">
           Top Rated
         </h2>
         <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
@@ -88,7 +85,7 @@ const Home = () => {
 
       {/* Upcoming */}
       <section id="upcoming" className="mb-8">
-        <h2 className="text-xl md:text-2xl font-semibold text-white mb-4">
+        <h2 className="text-xl md:text-2xl font-semibold text-slate-900 dark:text-white mb-4">
           Upcoming
         </h2>
         <div className="grid gap-5 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
