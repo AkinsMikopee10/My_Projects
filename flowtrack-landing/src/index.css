@@ -1,0 +1,38 @@
+@tailwind base; /* Import Tailwind’s base styles (resets, typography defaults) */
+@tailwind components; /* Import any Tailwind component classes */
+@tailwind utilities; /* Import Tailwind utility classes */
+
+html {
+  scroll-behavior: smooth; /* Smooth scrolling for anchor links */
+}
+
+body {
+  @apply bg-white text-gray-900 antialiased; /* Light background, dark text, smooth font rendering */
+}
+
+.container {
+  @apply max-w-6xl mx-auto px-4; /* Centers content and applies horizontal padding for consistent spacing */
+}
+
+/* Heading Styles */
+h1,
+h2,
+h3 {
+  @apply tracking-tight;
+}
+
+/* Slide-down Animation */
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-slideDown {
+  animation: slideDown 0.25s ease-out forwards;
+}

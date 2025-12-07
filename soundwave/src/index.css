@@ -1,3 +1,77 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Custom animations */
+@layer utilities {
+  /* Slow pulse animation for play button */
+  .animate-pulse-slow {
+    animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Animation delay utility */
+  .animation-delay-1000 {
+    animation-delay: 1s;
+  }
+
+  .animation-delay-2000 {
+    animation-delay: 2s;
+  }
+}
+
+/* Keyframe definitions */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.02);
+  }
+}
+
+/* Music bars animation - each bar has different timing */
+@layer utilities {
+  .animate-music-bar-1 {
+    animation: music-bar 0.8s ease-in-out infinite;
+    animation-delay: 0s;
+  }
+
+  .animate-music-bar-2 {
+    animation: music-bar 0.8s ease-in-out infinite;
+    animation-delay: 0.2s;
+  }
+
+  .animate-music-bar-3 {
+    animation: music-bar 0.8s ease-in-out infinite;
+    animation-delay: 0.4s;
+  }
+}
+
+@keyframes music-bar {
+  0%,
+  100% {
+    height: 0.5rem; /* 8px */
+  }
+  50% {
+    height: 1.25rem; /* 20px */
+  }
+}
+
+/* Mini-player slide up animation */
+@layer utilities {
+  .animate-slide-up {
+    animation: slide-up 0.3s ease-out;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
