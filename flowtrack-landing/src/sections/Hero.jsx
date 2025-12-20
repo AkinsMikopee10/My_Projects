@@ -41,8 +41,14 @@ const Hero = () => {
           transition={{ duration: 0.6 }} // slightly slower for a staggered effect
           className="flex justify-center"
         >
-          {/* This is a placeholder div for now; replace with real image later */}
-          <div className="w-full h-64 md:h-80 bg-gray-200 rounded-xl"></div>
+          {/* Image for the Hero page */}
+          <div className="w-full h-64 md:h-80">
+            <img
+              src="/src/assets/hero.png"
+              alt="hero-image"
+              className="rounded-xl shadow-sm"
+            />
+          </div>
         </motion.div>
       </div>
     </section>

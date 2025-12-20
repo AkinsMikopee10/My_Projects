@@ -52,8 +52,14 @@ const About = () => {
           viewport={{ once: true }}
           className="flex justify-center"
         >
-          {/* Temporary placeholder div for now; replace with real image later */}
-          <div className="w-full h-64 md:h-80 bg-gray-200 rounded-xl"></div>
+          {/* Image for the About page */}
+          <div className="w-full h-64 md:h-80">
+            <img
+              src="/src/assets/about.png"
+              alt="about-image"
+              className="rounded-xl shadow-sm"
+            />
+          </div>
         </motion.div>
       </div>
     </section>
