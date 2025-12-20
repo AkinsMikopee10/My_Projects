@@ -55,7 +55,7 @@ const About = () => {
           {/* Image for the About page */}
           <div className="w-full h-64 md:h-80">
             <img
-              src="/src/assets/about.png"
+              src="/images/about.png"
               alt="about-image"
               className="rounded-xl shadow-sm"
             />

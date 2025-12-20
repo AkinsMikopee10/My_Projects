@@ -44,7 +44,7 @@ const Hero = () => {
           {/* Image for the Hero page */}
           <div className="w-full h-64 md:h-80">
             <img
-              src="/src/assets/hero.png"
+              src="/images/hero.png"
               alt="hero-image"
               className="rounded-xl shadow-sm"
             />
