@@ -59,6 +59,12 @@ const Dashboard = () => {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold text-center mb-6">Dashboard</h1>
+      <div className="bg-blue-600 text-white p-5 rounded-2xl shadow-lg">
+        <p className="text-sm opacity-80">Wallet Balance</p>
+        <p className="text-3xl font-bold mt-2">
+          ₦ {user.balance.toLocaleString()}
+        </p>
+      </div>
       <div className="bg-gray-100 p-4 rounded-xl">
         <p className="text-sm text-gray-500">Email</p>
         <p className="font-semibold">{user.email}</p>
