@@ -10,7 +10,7 @@ const transactionSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ["funding", "airtime"],
+      enum: ["credit", "airtime"],
       required: true,
     },
 
@@ -37,7 +37,7 @@ const transactionSchema = new mongoose.Schema(
       apiResponse: Object,
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Transaction", transactionSchema);

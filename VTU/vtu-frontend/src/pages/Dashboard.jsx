@@ -4,8 +4,35 @@ import { useNavigate } from "react-router-dom";
 const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [amount, setAmount] = useState("");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+
+  const handleFund = async () => {
+    try {
+      const token = localStorage.getItem("token");
+
+      const res = await fetch("http://localhost:5000/api/wallet/fund", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ amount }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.message);
+      }
+
+      setUser({ ...user, balance: data.balance });
+      setAmount("");
+    } catch (error) {
+      alert(error.message);
+    }
+  };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -65,6 +92,26 @@ const Dashboard = () => {
           ₦ {user.balance.toLocaleString()}
         </p>
       </div>
+
+      <div className="bg-white border p-4 rounded-xl shadow-sm">
+        <h2 className="font-semibold mb-3">Fund Wallet</h2>
+
+        <input
+          type="number"
+          placeholder="Enter amount"
+          value={amount}
+          onChange={(e) => setAmount(e.target.value)}
+          className="w-full border p-3 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+
+        <button
+          onClick={handleFund}
+          className="w-full bg-green-600 text-white p-3 rounded-lg font-semibold"
+        >
+          Fund Wallet
+        </button>
+      </div>
+
       <div className="bg-gray-100 p-4 rounded-xl">
         <p className="text-sm text-gray-500">Email</p>
         <p className="font-semibold">{user.email}</p>
