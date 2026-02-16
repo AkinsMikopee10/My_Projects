@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 const Login = () => {
@@ -32,7 +32,10 @@ const Login = () => {
 
       console.log("Login success:", data);
 
-      // temporary redirect (we'll ad JWT storage next)
+      // Save token
+      localStorage.setItem("token", data.token);
+
+      // Redirect
       navigate("/dashboard");
     } catch (err) {
       setError(err.message);
@@ -40,6 +43,13 @@ const Login = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/dashboard");
+    }
+  }, [navigate]);
 
   return (
     <div className="p-6">
