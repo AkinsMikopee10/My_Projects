@@ -3,6 +3,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
+import Airtime from "./pages/Airtime";
 
 const App = () => {
   return (
@@ -16,6 +17,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/airtime"
+            element={
+              <ProtectedRoute>
+                <Airtime />
               </ProtectedRoute>
             }
           />
