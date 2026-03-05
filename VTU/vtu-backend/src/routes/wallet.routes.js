@@ -42,4 +42,19 @@ router.post("/fund", authMiddleware, async (req, res) => {
   }
 });
 
+router.get("/transaction/:userId", async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const transaction = await Transaction.find({ user: userId }).sort({
+      createdAt: -1,
+    });
+
+    res.json({ transaction });
+  } catch (error) {
+    console.error(" GET TRANSACTIONS ERROR:", error);
+    res.status(500).json({ message: error.message });
+  }
+});
+
 export default router;
