@@ -133,6 +133,15 @@ const Dashboard = () => {
           Fund Wallet
         </button>
 
+        <button
+          onClick={() => navigate("/airtime")}
+          className={
+            "w-full bg-orange-500 text-white p-3 rounded-lg font-semibold mt-4"
+          }
+        >
+          Buy Airtime
+        </button>
+
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-3">Transaction History</h3>
 
