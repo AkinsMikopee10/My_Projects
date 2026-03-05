@@ -5,6 +5,7 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [amount, setAmount] = useState("");
+  const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -64,6 +65,27 @@ const Dashboard = () => {
     };
 
     fetchUser();
+    const fetchTransactions = async () => {
+      try {
+        const token = localStorage.getItem("token");
+
+        const res = await fetch(
+          "http://localhost:5000/api/wallet/transactions",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const data = await res.json();
+        setTransactions(data);
+      } catch (error) {
+        console.error("Fetch transactions error:", error);
+      }
+    };
+
+    fetchTransactions();
   }, []);
 
   if (loading) {
@@ -110,6 +132,44 @@ const Dashboard = () => {
         >
           Fund Wallet
         </button>
+
+        <div className="mt-6">
+          <h3 className="text-lg font-semibold mb-3">Transaction History</h3>
+
+          {transactions.length === 0 ? (
+            <p className="text-gray-500 text-sm">No transactions yet</p>
+          ) : (
+            <div className="space-y-3">
+              {transactions.map((tx) => (
+                <div
+                  key={tx._id}
+                  className="bg-white shadow rounded-lg p-4 flex justify-between items-center"
+                >
+                  <div>
+                    <p className="font-medium capitalize">{tx.type}</p>
+                    <p className="text-xs text-gray-500">₦ {tx.reference}</p>
+                    <p className="text-xs text-gray-400">
+                      {new Date(tx.createdAt).toLocaleString()}
+                    </p>
+                  </div>
+
+                  <div className="text-right">
+                    <p className="font-semibold">₦{tx.amount}</p>
+                    <p
+                      className={`text-xs ${
+                        tx.status === "successful"
+                          ? "text-green-500"
+                          : "text-red-500"
+                      }`}
+                    >
+                      {tx.status}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       </div>
 
       <div className="bg-gray-100 p-4 rounded-xl">
