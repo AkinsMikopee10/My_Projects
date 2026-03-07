@@ -5,6 +5,7 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Airtime from "./pages/Airtime";
 import AirtimeConfirm from "./pages/AirtimeConfirm";
+import TransactionSuccess from "./pages/TransactionSuccess";
 
 const App = () => {
   return (
@@ -34,6 +35,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <AirtimeConfirm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transaction-success"
+            element={
+              <ProtectedRoute>
+                <TransactionSuccess />
               </ProtectedRoute>
             }
           />
