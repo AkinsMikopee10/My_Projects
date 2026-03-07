@@ -133,14 +133,43 @@ const Dashboard = () => {
           Fund Wallet
         </button>
 
-        <button
-          onClick={() => navigate("/airtime")}
-          className={
-            "w-full bg-orange-500 text-white p-3 rounded-lg font-semibold mt-4"
-          }
-        >
-          Buy Airtime
-        </button>
+        <div className="grid grid-cols-3 gap-4 mt-6">
+          <button
+            onClick={() => navigate("/airtime")}
+            className={"bg-blue-100 p-4 rounded text-center"}
+          >
+            📞
+            <p className="text-sm mt-1">Airtime</p>
+          </button>
+
+          <button className={"bg-blue-100 p-4 rounded text-center"}>
+            📶
+            <p className="text-sm mt-1">Data</p>
+          </button>
+
+          <button className={"bg-blue-100 p-4 rounded text-center"}>
+            📺
+            <p className="text-sm mt-1">Cable</p>
+          </button>
+
+          <button className={"bg-blue-100 p-4 rounded text-center"}>
+            💡
+            <p className="text-sm mt-1">Electricity</p>
+          </button>
+
+          <button
+            onClick={() => navigate("/dashboard")}
+            className="bg-blue-100 p-4 rounded text-center"
+          >
+            📜
+            <p className="text-sm mt-1">History</p>
+          </button>
+
+          <button className="bg-blue-100 p-4 rounded text-center">
+            👤
+            <p className="text-sm mt-1">Profile</p>
+          </button>
+        </div>
 
         <div className="mt-6">
           <h3 className="text-lg font-semibold mb-3">Transaction History</h3>
