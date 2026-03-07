@@ -1,29 +1,15 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Airtime = () => {
   const [phone, setPhone] = useState("");
   const [amount, setAmount] = useState("");
   const [network, setNetwork] = useState("MTN");
 
+  const navigate = useNavigate();
+
   const handleBuyAirtime = async () => {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch("http://localhost:5000/api/airtime/buy", {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${token}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        phone,
-        amount,
-        network,
-      }),
-    });
-
-    const data = await res.json();
-
-    alert(data.message || "Airtime purchase attempted");
+    navigate("/airtime-confirm", { state: { phone, amount, network } });
   };
 
   return (

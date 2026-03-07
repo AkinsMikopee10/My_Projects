@@ -4,6 +4,7 @@ import Register from "./pages/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Airtime from "./pages/Airtime";
+import AirtimeConfirm from "./pages/AirtimeConfirm";
 
 const App = () => {
   return (
@@ -25,6 +26,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Airtime />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/airtime-confirm"
+            element={
+              <ProtectedRoute>
+                <AirtimeConfirm />
               </ProtectedRoute>
             }
           />
