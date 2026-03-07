@@ -20,9 +20,14 @@ const AirtimeConfirm = () => {
 
     const data = await res.json();
 
-    alert(data.message || "Transaction completed");
-
-    navigate("/dashboard");
+    navigate("/transaction-success", {
+      state: {
+        phone,
+        amount,
+        network,
+        reference: data.reference || "TX-" + Date.now(),
+      },
+    });
   };
 
   return (
