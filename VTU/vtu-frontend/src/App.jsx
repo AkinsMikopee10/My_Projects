@@ -6,6 +6,7 @@ import Dashboard from "./pages/Dashboard";
 import Airtime from "./pages/Airtime";
 import AirtimeConfirm from "./pages/AirtimeConfirm";
 import TransactionSuccess from "./pages/TransactionSuccess";
+import Data from "./pages/Data";
 
 const App = () => {
   return (
@@ -43,6 +44,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <TransactionSuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/data"
+            element={
+              <ProtectedRoute>
+                <Data />
               </ProtectedRoute>
             }
           />
