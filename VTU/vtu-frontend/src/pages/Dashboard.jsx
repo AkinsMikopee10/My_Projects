@@ -142,7 +142,10 @@ const Dashboard = () => {
             <p className="text-sm mt-1">Airtime</p>
           </button>
 
-          <button className={"bg-blue-100 p-4 rounded text-center"}>
+          <button
+            onClick={() => navigate("/data")}
+            className={"bg-blue-100 p-4 rounded text-center"}
+          >
             📶
             <p className="text-sm mt-1">Data</p>
           </button>
