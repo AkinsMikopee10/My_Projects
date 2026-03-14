@@ -7,6 +7,7 @@ import airtimeRoutes from "./routes/airtime.routes.js";
 import dataRoutes from "./routes/data.routes.js";
 import walletRoutes from "./routes/wallet.routes.js";
 import transactionRoutes from "./routes/transaction.routes.js";
+import cableRoutes from "./routes/cable.routes.js";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ app.use("/api/airtime", airtimeRoutes);
 app.use("/api/data", dataRoutes);
 app.use("/api/wallet", walletRoutes);
 app.use("/api/transactions", transactionRoutes);
+app.use("/api/cable", cableRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "VTU API running" });

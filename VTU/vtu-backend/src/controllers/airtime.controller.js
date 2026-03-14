@@ -42,6 +42,7 @@ export const buyAirtime = async (req, res) => {
 
       return res.json({
         message: "Airtime purchase successful",
+        reference: transaction.reference,
       });
     }
 

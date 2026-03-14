@@ -8,6 +8,8 @@ import AirtimeConfirm from "./pages/AirtimeConfirm";
 import TransactionSuccess from "./pages/TransactionSuccess";
 import Data from "./pages/Data";
 import DataConfirm from "./pages/DataConfirm";
+import Cable from "./pages/Cable";
+import CableConfirm from "./pages/CableConfirm";
 
 const App = () => {
   return (
@@ -41,14 +43,6 @@ const App = () => {
             }
           />
           <Route
-            path="/transaction-success"
-            element={
-              <ProtectedRoute>
-                <TransactionSuccess />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/data"
             element={
               <ProtectedRoute>
@@ -61,6 +55,30 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <DataConfirm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transaction-success"
+            element={
+              <ProtectedRoute>
+                <TransactionSuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cable"
+            element={
+              <ProtectedRoute>
+                <Cable />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/cable-confirm"
+            element={
+              <ProtectedRoute>
+                <CableConfirm />
               </ProtectedRoute>
             }
           />
