@@ -1,5 +1,5 @@
 import DataPlan from "../models/DataPlan.js";
-import DataTransaction from "../models/DataTransaction.js";
+import Transaction from "../models/Transaction.js";
 import Wallet from "../models/Wallet.js";
 import crypto from "crypto";
 import { buyDataFromAnyAPI } from "../services/apiSelector.service.js";
@@ -31,37 +31,39 @@ export const buyData = async (req, res) => {
       return res.status(400).json({ message: "Insufficient balance" });
     }
 
-    const transaction = await DataTransaction.create({
+    if (wallet.status === "suspended") {
+      return res.status(403).json({ message: "Wallet is suspended" });
+    }
+
+    const reference = crypto.randomUUID();
+
+    const transaction = await Transaction.create({
       user: userId,
+      type: "data",
       plan: plan._id,
-      phone,
       amount: plan.price,
-      reference: crypto.randomUUID(),
+      reference,
       status: "pending",
+      metadata: { phone, plan: plan._id },
     });
 
-    wallet.balance -= plan.price;
-    await wallet.save();
-
+    // Call API first, debit wallet only on success
     const apiResult = await buyDataFromAnyAPI({
       phone,
       planCode: plan.planCode,
       amount: plan.costPrice,
-      reference: transaction.reference,
+      reference,
     });
 
     if (apiResult.status !== "success") {
       transaction.status = "failed";
-      transaction.apiResponse = apiResult;
+      transaction.metadata.apiResponse = apiResult;
       await transaction.save();
-
-      wallet.balance += plan.price;
-      await wallet.save();
-
-      return res
-        .status(400)
-        .json({ message: "Transaction failed, wallet refunded" });
+      return res.status(400).json({ message: "Data purchase failed" });
     }
+
+    wallet.balance -= plan.price;
+    await wallet.save();
 
     transaction.status = "successful";
     transaction.apiResponse = apiResult;
@@ -72,6 +74,7 @@ export const buyData = async (req, res) => {
       transaction,
     });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Data purchase error" });
   }
 };
