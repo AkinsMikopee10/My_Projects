@@ -8,16 +8,21 @@ export const buyDataFromAnyAPI = async (payload) => {
   ];
 
   for (let provider of providers) {
-    const response = await provider.handler(payload);
+    try {
+      const response = await provider.handler(payload);
 
-    if (response?.status === "success") {
-      return {
-        status: "success",
-        provider: provider.name,
-        response,
-      };
+      if (response?.status === "success") {
+        return {
+          status: "success",
+          provider: provider.name,
+          response,
+        };
+      }
+    } catch (error) {
+      console.error(`${provider.name} failed:`, error.message);
     }
   }
 
+  console.error("All VTU providers failed for payload:", payload);
   return { status: "failed" };
 };
