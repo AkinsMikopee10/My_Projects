@@ -146,7 +146,10 @@ const Dashboard = () => {
         >
           📜<p className="text-sm mt-1">History</p>
         </button>
-        <button className="bg-blue-100 p-4 rounded-xl text-center opacity-50">
+        <button
+          onClick={() => navigate("/profile")}
+          className="bg-blue-100 p-4 rounded-xl text-center"
+        >
           👤<p className="text-sm mt-1">Profile</p>
         </button>
       </div>

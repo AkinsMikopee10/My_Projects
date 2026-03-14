@@ -9,6 +9,7 @@ import walletRoutes from "./routes/wallet.routes.js";
 import transactionRoutes from "./routes/transaction.routes.js";
 import cableRoutes from "./routes/cable.routes.js";
 import electricityRoutes from "./routes/electricity.routes.js";
+import profileRoutes from "./routes/profile.routes.js";
 
 dotenv.config();
 
@@ -29,6 +30,7 @@ app.use("/api/wallet", walletRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/cable", cableRoutes);
 app.use("/api/electricity", electricityRoutes);
+app.use("/api/profile", profileRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "VTU API running" });
