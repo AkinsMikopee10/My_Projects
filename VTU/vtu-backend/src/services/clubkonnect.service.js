@@ -19,14 +19,18 @@ export const buyDataClubKonnect = async ({
         headers: {
           Authorization: `Bearer ${process.env.CLUBKONNECT_KEY}`,
         },
-      }
+      },
     );
 
-    return response.data;
+    const data = response.data;
+    return {
+      status: data.status === "00" ? "success" : "failed",
+      raw: data,
+    };
   } catch (error) {
     return {
       status: "failed",
-      error: error.message,
+      message: error.message,
     };
   }
 };
