@@ -12,14 +12,19 @@ dotenv.config();
 
 const app = express();
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/airtime", airtimeRoutes);
 app.use("/api/data", dataRoutes);
 app.use("/api/wallet", walletRoutes);
-app.use("/api/wallet", transactionRoutes);
+app.use("/api/transactions", transactionRoutes);
 
 app.get("/", (req, res) => {
   res.json({ message: "VTU API running" });
