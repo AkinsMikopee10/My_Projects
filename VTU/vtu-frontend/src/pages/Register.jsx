@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { api } from "../utils/api";
 
 const Register = () => {
   const navigate = useNavigate();
-
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -12,26 +12,19 @@ const Register = () => {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-
-    setLoading(true);
     setError("");
 
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters");
+      return;
+    }
+
+    setLoading(true);
     try {
-      const res = await fetch("http://localhost:5000/api/auth/register", {
+      await api("/api/auth/register", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ name, email, password }),
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Registration failed");
-      }
-
-      // After successful registration → go to login
       navigate("/");
     } catch (err) {
       setError(err.message);
@@ -53,10 +46,10 @@ const Register = () => {
 
         <input
           type="text"
-          placeholder="Name"
+          placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full border p-3 rounded-lg"
+          className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
 
@@ -65,16 +58,16 @@ const Register = () => {
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-3 rounded-lg"
+          className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
 
         <input
           type="password"
-          placeholder="Password"
+          placeholder="Password (min 6 characters)"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-3 rounded-lg"
+          className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
 
