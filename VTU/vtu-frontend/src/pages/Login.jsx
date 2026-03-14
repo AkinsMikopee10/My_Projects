@@ -1,41 +1,31 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { api } from "../utils/api";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const { login, user } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  useEffect(() => {
+    if (user) navigate("/dashboard");
+  }, [user, navigate]);
+
   const handleLogin = async (e) => {
     e.preventDefault();
-
-    setLoading(true);
     setError("");
+    setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:5000/api/auth/login", {
+      const data = await api("/api/auth/login", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
         body: JSON.stringify({ email, password }),
       });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.message || "Login failed");
-      }
-
-      console.log("Login success:", data);
-
-      // Save token
-      localStorage.setItem("token", data.token);
-
-      // Redirect
+      login(data.user, data.token);
       navigate("/dashboard");
     } catch (err) {
       setError(err.message);
@@ -44,16 +34,10 @@ const Login = () => {
     }
   };
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
-
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold text-center mb-6">Login</h1>
+
       <form onSubmit={handleLogin} className="space-y-4">
         {error && (
           <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm">
@@ -63,34 +47,35 @@ const Login = () => {
 
         <input
           type="email"
-          placeholder="Email........"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full border p-3 rounded-lg"
+          className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
 
         <input
           type="password"
-          placeholder="Password....."
+          placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full border p-3 rounded-lg"
+          className="w-full border p-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           required
         />
 
-        <p className="text-center text-sm mt-4">
-          Don't have an account?{" "}
-          <Link to="/register" className="text-blue-600 font-semibold">
-            Register
-          </Link>
-        </p>
         <button
           disabled={loading}
           className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold disabled:opacity-50"
         >
           {loading ? "Logging in..." : "Login"}
         </button>
+
+        <p className="text-center text-sm mt-2">
+          Don't have an account?{" "}
+          <Link to="/register" className="text-blue-600 font-semibold">
+            Register
+          </Link>
+        </p>
       </form>
     </div>
   );

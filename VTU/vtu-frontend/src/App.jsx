@@ -7,6 +7,7 @@ import Airtime from "./pages/Airtime";
 import AirtimeConfirm from "./pages/AirtimeConfirm";
 import TransactionSuccess from "./pages/TransactionSuccess";
 import Data from "./pages/Data";
+import DataConfirm from "./pages/DataConfirm";
 
 const App = () => {
   return (
@@ -52,6 +53,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Data />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/data-confirm"
+            element={
+              <ProtectedRoute>
+                <DataConfirm />
               </ProtectedRoute>
             }
           />

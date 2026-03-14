@@ -1,59 +1,89 @@
-import { useLocation, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useLocation, useNavigate, Navigate } from "react-router-dom";
+import { api } from "../utils/api";
 
 const AirtimeConfirm = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
 
   const { phone, amount, network } = location.state || {};
 
+  if (!phone || !amount || !network) {
+    return <Navigate to="/airtime" replace />;
+  }
+
   const confirmPurchase = async () => {
-    const token = localStorage.getItem("token");
-
-    const res = await fetch("http://localhost:5000/api/airtime/buy", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({ phone, amount, network }),
-    });
-
-    const data = await res.json();
-
-    navigate("/transaction-success", {
-      state: {
-        phone,
-        amount,
-        network,
-        reference: data.reference || "TX-" + Date.now(),
-      },
-    });
+    setError("");
+    setLoading(true);
+    try {
+      const data = await api("/api/airtime/buy", {
+        method: "POST",
+        body: JSON.stringify({ phone, amount: Number(amount), network }),
+      });
+      navigate("/transaction-success", {
+        state: {
+          phone,
+          amount,
+          network,
+          type: "Airtime",
+          reference: data.reference,
+        },
+      });
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="p-4 max-w-md mx-auto">
-      <h1 className="text-xl font-bold m-4">Confirm Airtime Purchase</h1>
-
-      <div className="border p-4 rounded mb-4 space-y-2">
-        <p>
-          <strong>Network:</strong> {network}
-        </p>
-        <p>
-          <strong>Phone:</strong> {phone}
-        </p>
-        <p>
-          <strong>Amount:</strong> {amount}
-        </p>
+    <div className="p-6">
+      <div className="flex items-center mb-6">
+        <button
+          onClick={() => navigate(-1)}
+          className="text-gray-500 mr-3 text-xl"
+        >
+          ←
+        </button>
+        <h1 className="text-xl font-bold">Confirm Purchase</h1>
       </div>
+
+      {error && (
+        <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm mb-4">
+          {error}
+        </div>
+      )}
+
+      <div className="border p-4 rounded-xl mb-6 space-y-3">
+        <div className="flex justify-between">
+          <span className="text-gray-500">Network</span>
+          <span className="font-semibold">{network}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-gray-500">Phone</span>
+          <span className="font-semibold">{phone}</span>
+        </div>
+        <div className="flex justify-between">
+          <span className="text-gray-500">Amount</span>
+          <span className="font-semibold">
+            ₦{Number(amount).toLocaleString()}
+          </span>
+        </div>
+      </div>
+
       <button
         onClick={confirmPurchase}
-        className="bg-green-500 text-white w-full p-2 rounded"
+        disabled={loading}
+        className="w-full bg-green-600 text-white p-3 rounded-lg font-semibold disabled:opacity-50 mb-3"
       >
-        Confirm Purchase
+        {loading ? "Processing..." : "Confirm Purchase"}
       </button>
+
       <button
         onClick={() => navigate(-1)}
-        className="bg-gray-300 w-full p-2 rounded mt-2"
+        className="w-full bg-gray-200 text-gray-700 p-3 rounded-lg font-semibold"
       >
         Cancel
       </button>
