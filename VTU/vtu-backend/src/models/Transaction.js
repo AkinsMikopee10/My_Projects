@@ -10,7 +10,7 @@ const transactionSchema = new mongoose.Schema(
 
     type: {
       type: String,
-      enum: ["credit", "airtime"],
+      enum: ["funding", "airtime", "data", "cable", "electricity"],
       required: true,
     },
 
@@ -34,6 +34,10 @@ const transactionSchema = new mongoose.Schema(
     metadata: {
       network: String,
       phone: String,
+      plan: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "DataPlan",
+      },
       apiResponse: Object,
     },
   },
