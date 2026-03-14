@@ -15,6 +15,7 @@ import ElectricityConfirm from "./pages/ElectricityConfirm";
 import ElectricitySuccess from "./pages/ElectricitySuccess";
 import Transactions from "./pages/Transactions";
 import Receipt from "./pages/Receipt";
+import Profile from "./pages/Profile";
 
 const App = () => {
   return (
@@ -124,6 +125,14 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Receipt />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
               </ProtectedRoute>
             }
           />
