@@ -13,6 +13,8 @@ import CableConfirm from "./pages/CableConfirm";
 import Electricity from "./pages/Electricity";
 import ElectricityConfirm from "./pages/ElectricityConfirm";
 import ElectricitySuccess from "./pages/ElectricitySuccess";
+import Transactions from "./pages/Transactions";
+import Receipt from "./pages/Receipt";
 
 const App = () => {
   return (
@@ -106,6 +108,22 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <ElectricitySuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/transactions"
+            element={
+              <ProtectedRoute>
+                <Transactions />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/receipt/:id"
+            element={
+              <ProtectedRoute>
+                <Receipt />
               </ProtectedRoute>
             }
           />
