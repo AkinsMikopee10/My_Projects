@@ -92,7 +92,7 @@ export const login = async (req, res) => {
 
 export const getMe = async (req, res) => {
   try {
-    const wallet = await Wallet.findOne({ user: req.user._d });
+    const wallet = await Wallet.findOne({ user: req.user._id });
     res.json({
       id: req.user._id,
       name: req.user.name,

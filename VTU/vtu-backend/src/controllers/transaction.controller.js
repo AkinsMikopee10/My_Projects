@@ -12,3 +12,21 @@ export const getTransactions = async (req, res) => {
     res.status(500).json({ message: "Server error" });
   }
 };
+
+export const getTransactionById = async (req, res) => {
+  try {
+    const transaction = await Transaction.findOne({
+      _id: req.params.id,
+      user: req.user._id,
+    });
+
+    if (!transaction) {
+      return res.status(404).json({ message: "Transaction not found" });
+    }
+
+    res.json(transaction);
+  } catch (error) {
+    console.error("TRANSACTION FETCH BY ID ERROR:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
