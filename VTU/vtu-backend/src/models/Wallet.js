@@ -12,6 +12,7 @@ const walletSchema = new mongoose.Schema(
     balance: {
       type: Number,
       default: 0,
+      min: 0,
     },
 
     currency: {
@@ -25,7 +26,7 @@ const walletSchema = new mongoose.Schema(
       default: "active",
     },
   },
-  { timestamps: true }
+  { timestamps: true },
 );
 
 export default mongoose.model("Wallet", walletSchema);
