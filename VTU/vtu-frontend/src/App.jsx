@@ -10,6 +10,9 @@ import Data from "./pages/Data";
 import DataConfirm from "./pages/DataConfirm";
 import Cable from "./pages/Cable";
 import CableConfirm from "./pages/CableConfirm";
+import Electricity from "./pages/Electricity";
+import ElectricityConfirm from "./pages/ElectricityConfirm";
+import ElectricitySuccess from "./pages/ElectricitySuccess";
 
 const App = () => {
   return (
@@ -79,6 +82,30 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <CableConfirm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/electricity"
+            element={
+              <ProtectedRoute>
+                <Electricity />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/electricity-confirm"
+            element={
+              <ProtectedRoute>
+                <ElectricityConfirm />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/electricity-success"
+            element={
+              <ProtectedRoute>
+                <ElectricitySuccess />
               </ProtectedRoute>
             }
           />

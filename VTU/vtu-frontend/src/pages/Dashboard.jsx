@@ -134,7 +134,10 @@ const Dashboard = () => {
         >
           📺<p className="text-sm mt-1">Cable</p>
         </button>
-        <button className="bg-blue-100 p-4 rounded-xl text-center opacity-50">
+        <button
+          onClick={() => navigate("/electricity")}
+          className="bg-blue-100 p-4 rounded-xl text-center"
+        >
           💡<p className="text-sm mt-1">Electricity</p>
         </button>
         <button
