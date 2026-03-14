@@ -1,7 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./pages/Dashboard";
 import Airtime from "./pages/Airtime";
 import AirtimeConfirm from "./pages/AirtimeConfirm";
@@ -16,14 +15,27 @@ import ElectricitySuccess from "./pages/ElectricitySuccess";
 import Transactions from "./pages/Transactions";
 import Receipt from "./pages/Receipt";
 import Profile from "./pages/Profile";
+import AdminDashboard from "./pages/admin/AdminDashboard";
+import AdminUsers from "./pages/admin/AdminUsers";
+import AdminUserDetail from "./pages/admin/AdminUserDetail";
+import AdminTransactions from "./pages/admin/AdminTransactions";
+import AdminDataPlans from "./pages/admin/AdminDataPlans";
+import AdminCablePlans from "./pages/admin/AdminCablePlans";
+import AdminElectricityProviders from "./pages/admin/AdminElectricityProviders";
+import AdminFundWallet from "./pages/admin/AdminFundWallet";
+import ProtectedRoute from "./components/ProtectedRoute";
+import AdminRoute from "./components/AdminRoute";
 
 const App = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex justify-center">
       <div className="w-full max-w-md bg-white min-h-screen">
         <Routes>
+          {/* Public */}
           <Route path="/" element={<Login />} />
           <Route path="/register" element={<Register />} />
+
+          {/* User */}
           <Route
             path="/dashboard"
             element={
@@ -49,6 +61,14 @@ const App = () => {
             }
           />
           <Route
+            path="/transaction-success"
+            element={
+              <ProtectedRoute>
+                <TransactionSuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/data"
             element={
               <ProtectedRoute>
@@ -61,14 +81,6 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <DataConfirm />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/transaction-success"
-            element={
-              <ProtectedRoute>
-                <TransactionSuccess />
               </ProtectedRoute>
             }
           />
@@ -134,6 +146,72 @@ const App = () => {
               <ProtectedRoute>
                 <Profile />
               </ProtectedRoute>
+            }
+          />
+
+          {/* Admin */}
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <AdminDashboard />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <AdminRoute>
+                <AdminUsers />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/users/:id"
+            element={
+              <AdminRoute>
+                <AdminUserDetail />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/transactions"
+            element={
+              <AdminRoute>
+                <AdminTransactions />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/data-plans"
+            element={
+              <AdminRoute>
+                <AdminDataPlans />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/cable-plans"
+            element={
+              <AdminRoute>
+                <AdminCablePlans />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/electricity-providers"
+            element={
+              <AdminRoute>
+                <AdminElectricityProviders />
+              </AdminRoute>
+            }
+          />
+          <Route
+            path="/admin/fund-wallet"
+            element={
+              <AdminRoute>
+                <AdminFundWallet />
+              </AdminRoute>
             }
           />
         </Routes>
