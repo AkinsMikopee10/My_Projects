@@ -15,19 +15,22 @@ dotenv.config();
 
 const app = express();
 
-app.use(
-  cors({
-    origin: ["http://localhost:5173", "https://vtu-web-app-gilt.vercel.app"],
-    credentials: true,
-  }),
-);
+app.use(cors({
+  origin: [
+    "http://localhost:5173",
+    process.env.FRONTEND_URL,
+  ],
+  credentials: true,
+}));
+
+// ⚠️ Webhook route must come BEFORE express.json()
+app.use("/api/wallet", walletRoutes);
 
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/airtime", airtimeRoutes);
 app.use("/api/data", dataRoutes);
-app.use("/api/wallet", walletRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/cable", cableRoutes);
 app.use("/api/electricity", electricityRoutes);

@@ -25,6 +25,8 @@ import AdminElectricityProviders from "./pages/admin/AdminElectricityProviders";
 import AdminFundWallet from "./pages/admin/AdminFundWallet";
 import ProtectedRoute from "./components/ProtectedRoute";
 import AdminRoute from "./components/AdminRoute";
+import FundWallet from "./pages/FundWallet";
+import VerifyPayment from "./pages/VerifyPayment";
 
 const App = () => {
   return (
@@ -145,6 +147,22 @@ const App = () => {
             element={
               <ProtectedRoute>
                 <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+          path="/fund-wallet"
+          element={
+            <ProtectedRoute>
+              <FundWallet />
+            </ProtectedRoute>
+          }
+          />
+          <Route
+            path="/wallet/verify"
+            element={
+              <ProtectedRoute>
+                <VerifyPayment />
               </ProtectedRoute>
             }
           />
