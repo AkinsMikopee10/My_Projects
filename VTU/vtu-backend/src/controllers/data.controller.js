@@ -47,13 +47,11 @@ export const buyData = async (req, res) => {
       metadata: { phone, plan: plan._id },
     });
 
-    // Call API first, debit wallet only on success
-    const apiResult = await buyDataFromAnyAPI({
-      phone,
-      planCode: plan.planCode,
-      amount: plan.costPrice,
-      reference,
-    });
+    // Simulated API response (replace with real API later)
+    const apiResult = {
+      status: "success",
+      message: "Data activated successfully",
+    };
 
     if (apiResult.status !== "success") {
       transaction.status = "failed";
