@@ -17,7 +17,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://your-vtu-app.vercel.app"],
+    origin: ["http://localhost:5173", "https://vtu-web-app-gilt.vercel.app"],
     credentials: true,
   }),
 );
