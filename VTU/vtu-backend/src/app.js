@@ -17,10 +17,11 @@ const app = express();
 
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173", "https://your-vtu-app.vercel.app"],
     credentials: true,
   }),
 );
+
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
