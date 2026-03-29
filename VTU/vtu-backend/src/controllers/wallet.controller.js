@@ -60,8 +60,11 @@ export const initializePayment = async (req, res) => {
       reference: paystackRef,
     });
   } catch (error) {
-    console.error("PAYSTACK INIT ERROR:", error.message);
-    res.status(500).json({ message: "Payment initialization failed" });
+    console.error("PAYSTACK INIT ERROR:", error.response?.data || error.message);
+    res.status(500).json({ 
+      message: "Payment initialization failed",
+      detail: error.response?.data || error.message 
+    });
   }
 };
 
