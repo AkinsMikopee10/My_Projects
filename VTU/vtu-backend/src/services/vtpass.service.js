@@ -86,6 +86,7 @@ export const buyDataVTpass = async ({ phone, serviceID, planCode, amount }) => {
     );
 
     const data = response.data;
+    console.log("VTPASS DATA RAW RESPONSE:", JSON.stringify(data));
     const success =
       data?.code === "000" ||
       data?.content?.transactions?.status === "delivered";
