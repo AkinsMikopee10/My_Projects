@@ -58,42 +58,40 @@ router.get("/electricity-providers", getAllElectricityProviders);
 router.post("/electricity-providers", createElectricityProvider);
 router.patch("/electricity-providers/:id", updateElectricityProvider);
 
-router.get("/vtupass-data-plans", authMiddleware, isAdmin, async (req, res) => {
+// ── Temp diagnostic routes (DELETE before going to production) ──────────────
+
+router.get("/vtpass-data-plans", async (req, res) => {
   try {
     const credentials = Buffer.from(
       `${process.env.VTPASS_EMAIL}:${process.env.VTPASS_PASSWORD}`,
     ).toString("base64");
 
     const networks = ["mtn-data", "glo-data", "airtel-data", "etisalat-data"];
-
     const results = {};
+
     for (const network of networks) {
       const response = await axios.get(
         `https://sandbox.vtpass.com/api/service-variations?serviceID=${network}`,
-        {
-          headers: {
-            Authorization: `Basic ${credentials}`,
-          },
-        },
+        { headers: { Authorization: `Basic ${credentials}` } },
       );
       results[network] = response.data;
     }
 
-    (res, json(results));
+    res.json(results);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
 });
 
-router.get("/vtpass-cable-plans", authMiddleware, isAdmin, async (req, res) => {
+router.get("/vtpass-cable-plans", async (req, res) => {
   try {
     const credentials = Buffer.from(
       `${process.env.VTPASS_EMAIL}:${process.env.VTPASS_PASSWORD}`,
     ).toString("base64");
 
     const providers = ["dstv", "gotv", "startimes"];
-
     const results = {};
+
     for (const provider of providers) {
       const response = await axios.get(
         `https://sandbox.vtpass.com/api/service-variations?serviceID=${provider}`,
