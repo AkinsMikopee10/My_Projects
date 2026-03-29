@@ -1,58 +1,70 @@
 import Wallet from "../models/Wallet.js";
 import Transaction from "../models/Transaction.js";
+import crypto from "crypto";
+import { buyAirtimeFromAnyAPI } from "../services/apiSelector.service.js";
 
 export const buyAirtime = async (req, res) => {
   try {
     const { network, phone, amount } = req.body;
-    const userId = req.user.id; // from auth middleware
+    const userId = req.user.id;
 
-    // 1️⃣ Check wallet
+    if (!network || !phone || !amount) {
+      return res.status(400).json({ message: "All fields are required" });
+    }
+
     const wallet = await Wallet.findOne({ user: userId });
     if (!wallet) {
       return res.status(404).json({ message: "Wallet not found" });
     }
-
+    if (wallet.status === "suspended") {
+      return res.status(403).json({ message: "Wallet is suspended" });
+    }
     if (wallet.balance < amount) {
       return res.status(400).json({ message: "Insufficient balance" });
     }
 
-    // 2️⃣ Create transaction (PENDING)
+    const reference = `AIR-${crypto.randomUUID()}`;
+
     const transaction = await Transaction.create({
       user: userId,
       type: "airtime",
       amount,
-      reference: `AIR_${Date.now()}`,
+      reference,
+      status: "pending",
       metadata: { network, phone },
     });
 
-    // 3️⃣ Simulate VTU API call (for now)
-    const apiResponse = {
-      status: "success",
-      message: "Airtime delivered",
-    };
+    // Call real API
+    const apiResult = await buyAirtimeFromAnyAPI({
+      phone,
+      network,
+      amount,
+      reference,
+    });
 
-    // 4️⃣ Handle API response
-    if (apiResponse.status === "success") {
-      wallet.balance -= amount;
-      await wallet.save();
-
-      transaction.status = "successful";
-      transaction.metadata.apiResponse = apiResponse;
+    if (apiResult.status !== "success") {
+      transaction.status = "failed";
+      transaction.metadata.apiResponse = apiResult;
       await transaction.save();
-
-      return res.json({
-        message: "Airtime purchase successful",
-        reference: transaction.reference,
+      return res.status(400).json({
+        message: apiResult.message || "Airtime purchase failed",
       });
     }
 
-    // 5️⃣ If failed
-    transaction.status = "failed";
-    transaction.metadata.apiResponse = apiResponse;
+    // Debit wallet only on success
+    wallet.balance -= amount;
+    await wallet.save();
+
+    transaction.status = "successful";
+    transaction.metadata.apiResponse = apiResult;
     await transaction.save();
 
-    res.status(400).json({ message: "Airtime purchase failed" });
+    res.json({
+      message: "Airtime purchase successful",
+      reference: transaction.reference,
+    });
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("AIRTIME ERROR:", error);
+    res.status(500).json({ message: "Airtime purchase error" });
   }
 };

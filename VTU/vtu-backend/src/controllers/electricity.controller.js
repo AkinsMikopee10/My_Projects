@@ -2,6 +2,7 @@ import ElectricityProvider from "../models/ElectricityProvider.js";
 import Wallet from "../models/Wallet.js";
 import Transaction from "../models/Transaction.js";
 import crypto from "crypto";
+import { buyElectricityFromAnyAPI } from "../services/apiSelector.service.js";
 
 export const getElectricityProviders = async (req, res) => {
   try {
@@ -18,18 +19,16 @@ export const buyElectricity = async (req, res) => {
     const { providerCode, meterNumber, meterType, amount, phone } = req.body;
     const userId = req.user.id;
 
-    // Validate inputs
     if (!providerCode || !meterNumber || !meterType || !amount || !phone) {
       return res.status(400).json({ message: "All fields are required" });
     }
 
     if (amount < 100) {
-      return res
-        .status(400)
-        .json({ message: "Minimum electricity amount is ₦100" });
+      return res.status(400).json({
+        message: "Minimum electricity amount is ₦100",
+      });
     }
 
-    // Validate provider
     const provider = await ElectricityProvider.findOne({
       providerCode,
       isActive: true,
@@ -38,7 +37,6 @@ export const buyElectricity = async (req, res) => {
       return res.status(400).json({ message: "Invalid provider" });
     }
 
-    // Validate wallet
     const wallet = await Wallet.findOne({ user: userId });
     if (!wallet) {
       return res.status(404).json({ message: "Wallet not found" });
@@ -50,38 +48,36 @@ export const buyElectricity = async (req, res) => {
       return res.status(400).json({ message: "Insufficient balance" });
     }
 
-    const reference = crypto.randomUUID();
+    const reference = `ELEC-${crypto.randomUUID()}`;
 
-    // Create pending transaction
     const transaction = await Transaction.create({
       user: userId,
       type: "electricity",
       amount,
       reference,
       status: "pending",
-      metadata: {
-        providerCode,
-        meterNumber,
-        meterType,
-        phone,
-      },
+      metadata: { providerCode, meterNumber, meterType, phone },
     });
 
-    // Simulate API call (replace with real API later)
-    const apiResult = {
-      status: "success",
-      token: "1234-5678-9012-3456-7890",
-      units: (amount / 50).toFixed(2),
-    };
+    // Call real API
+    const apiResult = await buyElectricityFromAnyAPI({
+      meterNumber,
+      providerCode,
+      meterType,
+      amount,
+      phone,
+      reference,
+    });
 
     if (apiResult.status !== "success") {
       transaction.status = "failed";
       transaction.metadata.apiResponse = apiResult;
       await transaction.save();
-      return res.status(400).json({ message: "Electricity purchase failed" });
+      return res.status(400).json({
+        message: apiResult.message || "Electricity purchase failed",
+      });
     }
 
-    // Debit wallet only on success
     wallet.balance -= amount;
     await wallet.save();
 
@@ -96,7 +92,7 @@ export const buyElectricity = async (req, res) => {
       transaction,
     });
   } catch (error) {
-    console.error(error);
+    console.error("ELECTRICITY ERROR:", error);
     res.status(500).json({ message: "Electricity purchase error" });
   }
 };

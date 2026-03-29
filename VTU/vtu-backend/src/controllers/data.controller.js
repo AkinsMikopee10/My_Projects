@@ -4,9 +4,6 @@ import Wallet from "../models/Wallet.js";
 import crypto from "crypto";
 import { buyDataFromAnyAPI } from "../services/apiSelector.service.js";
 
-/**
- * GET DATA PLANS
- */
 export const getDataPlans = async (req, res) => {
   try {
     const plans = await DataPlan.find({ isActive: true });
@@ -27,44 +24,50 @@ export const buyData = async (req, res) => {
     }
 
     const wallet = await Wallet.findOne({ user: userId });
-    if (!wallet || wallet.balance < plan.price) {
-      return res.status(400).json({ message: "Insufficient balance" });
+    if (!wallet) {
+      return res.status(404).json({ message: "Wallet not found" });
     }
-
     if (wallet.status === "suspended") {
       return res.status(403).json({ message: "Wallet is suspended" });
     }
+    if (wallet.balance < plan.price) {
+      return res.status(400).json({ message: "Insufficient balance" });
+    }
 
-    const reference = crypto.randomUUID();
+    const reference = `DATA-${crypto.randomUUID()}`;
 
     const transaction = await Transaction.create({
       user: userId,
       type: "data",
-      plan: plan._id,
       amount: plan.price,
       reference,
       status: "pending",
       metadata: { phone, plan: plan._id },
     });
 
-    // Simulated API response (replace with real API later)
-    const apiResult = {
-      status: "success",
-      message: "Data activated successfully",
-    };
+    // Call real API
+    const apiResult = await buyDataFromAnyAPI({
+      phone,
+      planCode: plan.planCode,
+      amount: plan.costPrice,
+      reference,
+    });
 
     if (apiResult.status !== "success") {
       transaction.status = "failed";
       transaction.metadata.apiResponse = apiResult;
       await transaction.save();
-      return res.status(400).json({ message: "Data purchase failed" });
+      return res.status(400).json({
+        message: apiResult.message || "Data purchase failed",
+      });
     }
 
+    // Debit wallet only on success
     wallet.balance -= plan.price;
     await wallet.save();
 
     transaction.status = "successful";
-    transaction.apiResponse = apiResult;
+    transaction.metadata.apiResponse = apiResult;
     await transaction.save();
 
     res.json({
@@ -72,7 +75,7 @@ export const buyData = async (req, res) => {
       transaction,
     });
   } catch (error) {
-    console.error(error);
+    console.error("DATA ERROR:", error);
     res.status(500).json({ message: "Data purchase error" });
   }
 };

@@ -1,28 +1,67 @@
-import { buyDataVTpass } from "./vtpass.service.js";
-import { buyDataClubKonnect } from "./clubkonnect.service.js";
+import {
+  buyAirtimeVTpass,
+  buyDataVTpass,
+  buyCableVTpass,
+  buyElectricityVTpass,
+} from "./vtpass.service.js";
 
-export const buyDataFromAnyAPI = async (payload) => {
-  const providers = [
-    { name: "VTPASS", handler: buyDataVTpass },
-    { name: "CLUBKONNECT", handler: buyDataClubKonnect },
-  ];
+import {
+  buyAirtimeClubKonnect,
+  buyDataClubKonnect,
+  buyCableClubKonnect,
+  buyElectricityClubKonnect,
+} from "./clubkonnect.service.js";
 
-  for (let provider of providers) {
+const withFallback = async (providers, payload) => {
+  for (const provider of providers) {
     try {
+      console.log(`Trying provider: ${provider.name}`);
       const response = await provider.handler(payload);
-
       if (response?.status === "success") {
-        return {
-          status: "success",
-          provider: provider.name,
-          response,
-        };
+        console.log(`Success with provider: ${provider.name}`);
+        return { ...response, provider: provider.name };
       }
+      console.log(`Provider ${provider.name} failed:`, response?.message);
     } catch (error) {
-      console.error(`${provider.name} failed:`, error.message);
+      console.error(`Provider ${provider.name} threw error:`, error.message);
     }
   }
-
-  console.error("All VTU providers failed for payload:", payload);
-  return { status: "failed" };
+  console.error("All providers failed for payload:", payload);
+  return { status: "failed", message: "All providers failed" };
 };
+
+export const buyAirtimeFromAnyAPI = (payload) =>
+  withFallback(
+    [
+      { name: "VTPASS", handler: buyAirtimeVTpass },
+      { name: "CLUBKONNECT", handler: buyAirtimeClubKonnect },
+    ],
+    payload
+  );
+
+export const buyDataFromAnyAPI = (payload) =>
+  withFallback(
+    [
+      { name: "VTPASS", handler: buyDataVTpass },
+      { name: "CLUBKONNECT", handler: buyDataClubKonnect },
+    ],
+    payload
+  );
+
+export const buyCableFromAnyAPI = (payload) =>
+  withFallback(
+    [
+      { name: "VTPASS", handler: buyCableVTpass },
+      { name: "CLUBKONNECT", handler: buyCableClubKonnect },
+    ],
+    payload
+  );
+
+export const buyElectricityFromAnyAPI = (payload) =>
+  withFallback(
+    [
+      { name: "VTPASS", handler: buyElectricityVTpass },
+      { name: "CLUBKONNECT", handler: buyElectricityClubKonnect },
+    ],
+    payload
+  );
