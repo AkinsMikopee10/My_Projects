@@ -62,9 +62,13 @@ router.patch("/electricity-providers/:id", updateElectricityProvider);
 
 router.get("/vtpass-data-plans", async (req, res) => {
   try {
-    const credentials = Buffer.from(
-      `${process.env.VTPASS_EMAIL}:${process.env.VTPASS_PASSWORD}`,
-    ).toString("base64");
+    const email = process.env.VTPASS_EMAIL;
+    const password = process.env.VTPASS_PASSWORD;
+
+    console.log("VTPASS_EMAIL:", email);
+    console.log("VTPASS_PASSWORD:", password ? "SET" : "NOT SET");
+
+    const credentials = Buffer.from(`${email}:${password}`).toString("base64");
 
     const networks = ["mtn-data", "glo-data", "airtel-data", "etisalat-data"];
     const results = {};
@@ -79,7 +83,10 @@ router.get("/vtpass-data-plans", async (req, res) => {
 
     res.json(results);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("VTPASS DIAG ERROR:", error.response?.data || error.message);
+    res
+      .status(500)
+      .json({ message: error.message, detail: error.response?.data || null });
   }
 });
 
