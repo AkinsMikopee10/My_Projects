@@ -36,10 +36,14 @@ export const buyAirtimeClubKonnect = async ({ phone, network, amount }) => {
     });
 
     const data = response.data;
+    // Log exact response so we can see what ClubKonnect returns
+    console.log("CLUBKONNECT AIRTIME RAW RESPONSE:", JSON.stringify(data));
+
     const success =
       data?.status === "success" ||
       data?.Status === "success" ||
-      data?.retcode === "000";
+      data?.retcode === "000" ||
+      data?.response_description === "TRANSACTION SUCCESSFUL";
 
     return {
       status: success ? "success" : "failed",
@@ -47,7 +51,10 @@ export const buyAirtimeClubKonnect = async ({ phone, network, amount }) => {
       raw: data,
     };
   } catch (error) {
-    console.error("CLUBKONNECT AIRTIME ERROR:", error.message);
+    console.error(
+      "CLUBKONNECT AIRTIME ERROR:",
+      error.response?.data || error.message,
+    );
     return { status: "failed", message: error.message };
   }
 };
@@ -66,6 +73,9 @@ export const buyDataClubKonnect = async ({ phone, planCode, amount }) => {
     });
 
     const data = response.data;
+    // Log exact response so we can see what ClubKonnect returns
+    console.log("CLUBKONNECT DATA RAW RESPONSE:", JSON.stringify(data));
+
     const success =
       data?.status === "success" ||
       data?.Status === "success" ||
@@ -102,6 +112,9 @@ export const buyCableClubKonnect = async ({
     });
 
     const data = response.data;
+    // Log exact response so we can see what ClubKonnect returns
+    console.log("CLUBKONNECT CABLE RAW RESPONSE:", JSON.stringify(data));
+
     const success =
       data?.status === "success" ||
       data?.Status === "success" ||
@@ -141,6 +154,9 @@ export const buyElectricityClubKonnect = async ({
     });
 
     const data = response.data;
+    // Log exact response so we can see what ClubKonnect returns
+    console.log("CLUBKONNECT ELECTRICITY RAW RESPONSE:", JSON.stringify(data));
+
     const success =
       data?.status === "success" ||
       data?.Status === "success" ||
