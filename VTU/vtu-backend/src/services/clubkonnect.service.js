@@ -1,6 +1,13 @@
 import axios from "axios";
 
-const BASE_URL = "https://www.clubkonnect.com/api/v1";
+const BASE_URL = "https://www.nellobytesystems.com/";
+const ENDPOINTS = {
+  balance: "APIBalanceV1.asp",
+  data: "APIDatabundleV1.asp",
+  airtime: "APIBuyAirtimeV1.asp",
+  tv: "APICableTVV1.asp",
+  electricity: "APIElectricityV1.asp",
+};
 
 const getCredentials = () => ({
   UserID: process.env.CLUBKONNECT_USERID,
@@ -17,20 +24,26 @@ export const buyAirtimeClubKonnect = async ({ phone, network, amount }) => {
       "9MOBILE": "9MOBILE",
     };
 
-    const response = await axios.post(`${BASE_URL}/airtime/`, {
-      ...getCredentials(),
-      MobileNetwork: networkMap[network] || network,
-      Amount: amount,
-      MobileNumber: phone,
-      RequestID: Date.now().toString(),
+    const response = await axios.get(BASE_URL + ENDPOINTS.airtime, {
+      params: {
+        ...getCredentials(),
+        MobileNetwork: networkMap[network] || network,
+        Amount: amount,
+        MobileNumber: phone,
+        RequestID: Date.now().toString(),
+        CallBackURL: "",
+      },
     });
 
     const data = response.data;
-    const success = data?.Status === "success" || data?.status === "success";
+    const success =
+      data?.status === "success" ||
+      data?.Status === "success" ||
+      data?.retcode === "000";
 
     return {
       status: success ? "success" : "failed",
-      message: data?.Message || data?.message || "Unknown response",
+      message: data?.message || data?.Message || "Unknown response",
       raw: data,
     };
   } catch (error) {
@@ -42,19 +55,25 @@ export const buyAirtimeClubKonnect = async ({ phone, network, amount }) => {
 // ─── DATA ──────────────────────────────────────────────────────────
 export const buyDataClubKonnect = async ({ phone, planCode, amount }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/data/`, {
-      ...getCredentials(),
-      DataPlan: planCode,
-      MobileNumber: phone,
-      RequestID: Date.now().toString(),
+    const response = await axios.get(BASE_URL + ENDPOINTS.data, {
+      params: {
+        ...getCredentials(),
+        DataPlan: planCode,
+        MobileNumber: phone,
+        RequestID: Date.now().toString(),
+        CallBackURL: "",
+      },
     });
 
     const data = response.data;
-    const success = data?.Status === "success" || data?.status === "success";
+    const success =
+      data?.status === "success" ||
+      data?.Status === "success" ||
+      data?.retcode === "000";
 
     return {
       status: success ? "success" : "failed",
-      message: data?.Message || data?.message || "Unknown response",
+      message: data?.message || data?.Message || "Unknown response",
       raw: data,
     };
   } catch (error) {
@@ -71,20 +90,26 @@ export const buyCableClubKonnect = async ({
   amount,
 }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/cabletv/`, {
-      ...getCredentials(),
-      CableTVNetwork: provider,
-      CableTVPackage: planCode,
-      SmartCardNumber: smartCardNumber,
-      RequestID: Date.now().toString(),
+    const response = await axios.get(BASE_URL + ENDPOINTS.tv, {
+      params: {
+        ...getCredentials(),
+        CableTV: provider,
+        Package: planCode,
+        SmartCardNo: smartCardNumber,
+        RequestID: Date.now().toString(),
+        CallBackURL: "",
+      },
     });
 
     const data = response.data;
-    const success = data?.Status === "success" || data?.status === "success";
+    const success =
+      data?.status === "success" ||
+      data?.Status === "success" ||
+      data?.retcode === "000";
 
     return {
       status: success ? "success" : "failed",
-      message: data?.Message || data?.message || "Unknown response",
+      message: data?.message || data?.Message || "Unknown response",
       raw: data,
     };
   } catch (error) {
@@ -102,28 +127,31 @@ export const buyElectricityClubKonnect = async ({
   phone,
 }) => {
   try {
-    const response = await axios.post(`${BASE_URL}/electricity/`, {
-      ...getCredentials(),
-      ElectricCompany: providerCode,
-      MeterType: meterType,
-      MeterNumber: meterNumber,
-      Amount: amount,
-      MobileNumber: phone,
-      RequestID: Date.now().toString(),
+    const response = await axios.get(BASE_URL + ENDPOINTS.electricity, {
+      params: {
+        ...getCredentials(),
+        ElectricCompany: providerCode,
+        MeterType: meterType,
+        MeterNumber: meterNumber,
+        Amount: amount,
+        MobileNumber: phone,
+        RequestID: Date.now().toString(),
+        CallBackURL: "",
+      },
     });
 
     const data = response.data;
-    const success = data?.Status === "success" || data?.status === "success";
+    const success =
+      data?.status === "success" ||
+      data?.Status === "success" ||
+      data?.retcode === "000";
 
-    const token =
-      data?.Token || data?.token || null;
-
-    const units =
-      data?.Units || data?.units || null;
+    const token = data?.Token || data?.token || null;
+    const units = data?.Units || data?.units || null;
 
     return {
       status: success ? "success" : "failed",
-      message: data?.Message || data?.message || "Unknown response",
+      message: data?.message || data?.Message || "Unknown response",
       token,
       units,
       raw: data,
