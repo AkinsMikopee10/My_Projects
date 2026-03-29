@@ -2,9 +2,9 @@ import axios from "axios";
 
 const BASE_URL = "https://www.nellobytesystems.com/";
 const ENDPOINTS = {
-  balance: "APIBalanceV1.asp",
+  balance: "APIWalletBalanceV1.asp",
   data: "APIDatabundleV1.asp",
-  airtime: "APIBuyAirtimeV1.asp",
+  airtime: "APIAirtimeV1.asp",
   tv: "APICableTVV1.asp",
   electricity: "APIElectricityV1.asp",
 };

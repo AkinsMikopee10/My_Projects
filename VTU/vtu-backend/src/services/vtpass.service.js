@@ -1,13 +1,14 @@
 import axios from "axios";
 import crypto from "crypto";
 
-const VTPASS_BASE_URL = process.env.VTPASS_ENV === "production"
-  ? "https://api.vtpass.com/api"
-  : "https://sandbox.vtpass.com/api";
+const VTPASS_BASE_URL =
+  process.env.VTPASS_ENV === "production"
+    ? "https://api.vtpass.com/api"
+    : "https://sandbox.vtpass.com/api";
 
 const getAuthHeaders = () => {
   const credentials = Buffer.from(
-    `${process.env.VTPASS_EMAIL}:${process.env.VTPASS_PASSWORD}`
+    `${process.env.VTPASS_EMAIL}:${process.env.VTPASS_PASSWORD}`,
   ).toString("base64");
 
   return {
@@ -36,6 +37,11 @@ export const buyAirtimeVTpass = async ({ phone, network, amount }) => {
       "9MOBILE": "etisalat",
     };
 
+    const serviceID = serviceMap[network];
+    if (!serviceID) {
+      return { status: "failed", message: `Unknown network: ${network}` };
+    }
+
     const response = await axios.post(
       `${VTPASS_BASE_URL}/pay`,
       {
@@ -44,7 +50,7 @@ export const buyAirtimeVTpass = async ({ phone, network, amount }) => {
         amount,
         phone,
       },
-      { headers: getAuthHeaders() }
+      { headers: getAuthHeaders() },
     );
 
     const data = response.data;
@@ -76,7 +82,7 @@ export const buyDataVTpass = async ({ phone, planCode, amount }) => {
         amount,
         phone,
       },
-      { headers: getAuthHeaders() }
+      { headers: getAuthHeaders() },
     );
 
     const data = response.data;
@@ -119,7 +125,7 @@ export const buyCableVTpass = async ({
         amount,
         phone: smartCardNumber,
       },
-      { headers: getAuthHeaders() }
+      { headers: getAuthHeaders() },
     );
 
     const data = response.data;
@@ -157,7 +163,7 @@ export const buyElectricityVTpass = async ({
         amount,
         phone,
       },
-      { headers: getAuthHeaders() }
+      { headers: getAuthHeaders() },
     );
 
     const data = response.data;
@@ -165,15 +171,9 @@ export const buyElectricityVTpass = async ({
       data?.code === "000" ||
       data?.content?.transactions?.status === "delivered";
 
-    const token =
-      data?.content?.transactions?.token ||
-      data?.token ||
-      null;
+    const token = data?.content?.transactions?.token || data?.token || null;
 
-    const units =
-      data?.content?.transactions?.units ||
-      data?.units ||
-      null;
+    const units = data?.content?.transactions?.units || data?.units || null;
 
     return {
       status: success ? "success" : "failed",
