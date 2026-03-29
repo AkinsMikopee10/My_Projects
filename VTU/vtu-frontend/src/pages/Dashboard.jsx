@@ -91,28 +91,12 @@ const Dashboard = () => {
       </div>
 
       {/* Fund Wallet */}
-      <div className="bg-white border p-4 rounded-xl shadow-sm">
-        <h2 className="font-semibold mb-3">Fund Wallet</h2>
-        {fundError && (
-          <div className="bg-red-100 text-red-600 p-2 rounded-lg text-sm mb-2">
-            {fundError}
-          </div>
-        )}
-        <input
-          type="number"
-          placeholder="Enter amount"
-          value={amount}
-          onChange={(e) => setAmount(e.target.value)}
-          className="w-full border p-3 rounded-lg mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-
-        <button
-          onClick={handleFund}
-          className="w-full bg-green-600 text-white p-3 rounded-lg font-semibold"
-        >
-          Fund Wallet
-        </button>
-      </div>
+<button
+  onClick={() => navigate("/fund-wallet")}
+  className="w-full bg-green-600 text-white p-3 rounded-lg font-semibold"
+>
+  + Fund Wallet
+</button>
 
       {/* Quick Actions */}
       <div className="grid grid-cols-3 gap-4">
