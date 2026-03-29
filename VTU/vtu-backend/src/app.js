@@ -10,6 +10,7 @@ import transactionRoutes from "./routes/transaction.routes.js";
 import cableRoutes from "./routes/cable.routes.js";
 import electricityRoutes from "./routes/electricity.routes.js";
 import profileRoutes from "./routes/profile.routes.js";
+import { paystackWebhook } from "./controllers/wallet.controller.js";
 
 dotenv.config();
 
@@ -23,14 +24,20 @@ app.use(cors({
   credentials: true,
 }));
 
-// ⚠️ Webhook route must come BEFORE express.json()
-app.use("/api/wallet", walletRoutes);
+// ⚠️ Webhook needs raw body — must be before express.json()
+app.post(
+  "/api/wallet/webhook",
+  express.raw({ type: "application/json" }),
+  paystackWebhook
+);
 
+// All other routes use JSON body parser
 app.use(express.json());
 app.use("/api/auth", authRoutes);
 app.use("/api/admin", adminRoutes);
 app.use("/api/airtime", airtimeRoutes);
 app.use("/api/data", dataRoutes);
+app.use("/api/wallet", walletRoutes);
 app.use("/api/transactions", transactionRoutes);
 app.use("/api/cable", cableRoutes);
 app.use("/api/electricity", electricityRoutes);
