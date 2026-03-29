@@ -54,6 +54,7 @@ export const buyAirtimeVTpass = async ({ phone, network, amount }) => {
     );
 
     const data = response.data;
+    console.log("VTPASS AIRTIME RAW RESPONSE:", JSON.stringify(data));
     const success =
       data?.code === "000" ||
       data?.content?.transactions?.status === "delivered";
