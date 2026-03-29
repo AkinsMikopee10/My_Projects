@@ -48,6 +48,7 @@ export const buyData = async (req, res) => {
     // Call real API
     const apiResult = await buyDataFromAnyAPI({
       phone,
+      serviceID: plan.serviceID,
       planCode: plan.planCode,
       amount: plan.costPrice,
       reference,

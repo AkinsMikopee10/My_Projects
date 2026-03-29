@@ -46,7 +46,7 @@ export const buyAirtimeVTpass = async ({ phone, network, amount }) => {
       `${VTPASS_BASE_URL}/pay`,
       {
         request_id: generateRequestId(),
-        serviceID: serviceMap[network] || network.toLowerCase(),
+        serviceID,
         amount,
         phone,
       },
@@ -70,15 +70,15 @@ export const buyAirtimeVTpass = async ({ phone, network, amount }) => {
 };
 
 // ─── DATA ──────────────────────────────────────────────────────────
-export const buyDataVTpass = async ({ phone, planCode, amount }) => {
+export const buyDataVTpass = async ({ phone, serviceID, planCode, amount }) => {
   try {
     const response = await axios.post(
       `${VTPASS_BASE_URL}/pay`,
       {
         request_id: generateRequestId(),
-        serviceID: planCode,
+        serviceID, // e.g. "mtn-data"
         billersCode: phone,
-        variation_code: planCode,
+        variation_code: planCode, // e.g. "mtn-100mb-1000"
         amount,
         phone,
       },
@@ -172,7 +172,6 @@ export const buyElectricityVTpass = async ({
       data?.content?.transactions?.status === "delivered";
 
     const token = data?.content?.transactions?.token || data?.token || null;
-
     const units = data?.content?.transactions?.units || data?.units || null;
 
     return {
