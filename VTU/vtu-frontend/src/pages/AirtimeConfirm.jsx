@@ -2,6 +2,37 @@ import { useState } from "react";
 import { useLocation, useNavigate, Navigate } from "react-router-dom";
 import { api } from "../utils/api";
 
+const networkConfig = {
+  MTN: {
+    color: "from-yellow-400 to-yellow-500",
+    bg: "bg-yellow-400/10",
+    border: "border-yellow-400/30",
+    text: "text-yellow-400",
+    dot: "bg-yellow-400",
+  },
+  GLO: {
+    color: "from-green-400 to-green-500",
+    bg: "bg-green-400/10",
+    border: "border-green-400/30",
+    text: "text-green-400",
+    dot: "bg-green-400",
+  },
+  AIRTEL: {
+    color: "from-red-400 to-red-500",
+    bg: "bg-red-400/10",
+    border: "border-red-400/30",
+    text: "text-red-400",
+    dot: "bg-red-400",
+  },
+  "9MOBILE": {
+    color: "from-emerald-400 to-teal-400",
+    bg: "bg-emerald-400/10",
+    border: "border-emerald-400/30",
+    text: "text-emerald-400",
+    dot: "bg-emerald-400",
+  },
+};
+
 const AirtimeConfirm = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -13,6 +44,8 @@ const AirtimeConfirm = () => {
   if (!phone || !amount || !network) {
     return <Navigate to="/airtime" replace />;
   }
+
+  const net = networkConfig[network] || networkConfig.MTN;
 
   const confirmPurchase = async () => {
     setError("");
@@ -39,54 +72,159 @@ const AirtimeConfirm = () => {
   };
 
   return (
-    <div className="p-6">
-      <div className="flex items-center mb-6">
+    <div className="min-h-screen bg-brand-dark font-sans relative overflow-hidden">
+      {/* Background orbs */}
+      <div className="absolute top-[-80px] left-[-80px] w-72 h-72 rounded-full bg-brand-primary opacity-10 blur-3xl pointer-events-none" />
+      <div className="absolute bottom-[-60px] right-[-60px] w-64 h-64 rounded-full bg-brand-accent opacity-10 blur-3xl pointer-events-none" />
+
+      {/* Header */}
+      <div className="relative z-10 flex items-center gap-3 px-5 pt-12 pb-6">
         <button
           onClick={() => navigate(-1)}
-          className="text-gray-500 mr-3 text-xl"
+          className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition-all"
         >
           ←
         </button>
-        <h1 className="text-xl font-bold">Confirm Purchase</h1>
+        <div>
+          <h1 className="font-display text-lg font-bold text-white leading-tight">
+            Confirm Purchase
+          </h1>
+          <p className="text-xs text-white/40">Review your airtime details</p>
+        </div>
       </div>
 
-      {error && (
-        <div className="bg-red-100 text-red-600 p-3 rounded-lg text-sm mb-4">
-          {error}
-        </div>
-      )}
+      <div className="relative z-10 px-5 space-y-4 animate-slideUp">
+        {/* Error */}
+        {error && (
+          <div className="flex items-start gap-3 bg-red-500/10 border border-red-500/20 rounded-2xl p-4">
+            <span className="text-red-400 text-lg leading-none mt-0.5">⚠</span>
+            <p className="text-red-400 text-sm">{error}</p>
+          </div>
+        )}
 
-      <div className="border p-4 rounded-xl mb-6 space-y-3">
-        <div className="flex justify-between">
-          <span className="text-gray-500">Network</span>
-          <span className="font-semibold">{network}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Phone</span>
-          <span className="font-semibold">{phone}</span>
-        </div>
-        <div className="flex justify-between">
-          <span className="text-gray-500">Amount</span>
-          <span className="font-semibold">
-            ₦{Number(amount).toLocaleString()}
+        {/* Network badge */}
+        <div
+          className={`flex items-center gap-3 ${net.bg} border ${net.border} rounded-2xl px-4 py-3`}
+        >
+          <span className={`w-2.5 h-2.5 rounded-full ${net.dot}`} />
+          <span className={`text-sm font-semibold ${net.text}`}>
+            {network} Network
           </span>
+          <span className="ml-auto text-white/30 text-xs">Selected</span>
+        </div>
+
+        {/* Summary card */}
+        <div className="bg-white/[0.04] border border-white/10 rounded-2xl overflow-hidden">
+          {/* Amount hero */}
+          <div className="bg-gradient-to-r from-brand-primary/20 to-brand-accent/10 border-b border-white/10 px-5 py-5 text-center">
+            <p className="text-white/50 text-xs uppercase tracking-widest mb-1">
+              You're sending
+            </p>
+            <p className="font-display text-4xl font-bold text-white">
+              ₦{Number(amount).toLocaleString()}
+            </p>
+            <p className="text-white/40 text-xs mt-1">Airtime Recharge</p>
+          </div>
+
+          {/* Details rows */}
+          <div className="divide-y divide-white/5">
+            <div className="flex justify-between items-center px-5 py-4">
+              <span className="text-white/50 text-sm">Network</span>
+              <span className={`text-sm font-semibold ${net.text}`}>
+                {network}
+              </span>
+            </div>
+            <div className="flex justify-between items-center px-5 py-4">
+              <span className="text-white/50 text-sm">Phone Number</span>
+              <span className="text-white text-sm font-semibold tracking-wide">
+                {phone}
+              </span>
+            </div>
+            <div className="flex justify-between items-center px-5 py-4">
+              <span className="text-white/50 text-sm">Amount</span>
+              <span className="text-white text-sm font-bold">
+                ₦{Number(amount).toLocaleString()}
+              </span>
+            </div>
+            <div className="flex justify-between items-center px-5 py-4">
+              <span className="text-white/50 text-sm">Transaction Fee</span>
+              <span className="text-brand-accent text-sm font-semibold">
+                Free
+              </span>
+            </div>
+            <div className="flex justify-between items-center px-5 py-4 bg-white/[0.02]">
+              <span className="text-white/80 text-sm font-semibold">
+                Total Deducted
+              </span>
+              <span className="text-white text-sm font-bold">
+                ₦{Number(amount).toLocaleString()}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Info note */}
+        <div className="flex items-start gap-3 bg-brand-primary/10 border border-brand-primary/20 rounded-2xl px-4 py-3">
+          <span className="text-brand-primary text-base leading-none mt-0.5">
+            ℹ
+          </span>
+          <p className="text-white/50 text-xs leading-relaxed">
+            Airtime will be delivered instantly. Funds will be deducted from
+            your BetaPlug wallet.
+          </p>
+        </div>
+
+        {/* Actions */}
+        <div className="space-y-3 pt-1 pb-10">
+          <button
+            onClick={confirmPurchase}
+            disabled={loading}
+            className="w-full py-4 rounded-2xl font-display font-bold text-white text-base
+              bg-gradient-to-r from-brand-primary to-brand-accent
+              disabled:opacity-50 disabled:cursor-not-allowed
+              hover:opacity-90 active:scale-[0.98] transition-all
+              shadow-lg shadow-brand-primary/25 relative overflow-hidden"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center gap-2">
+                <svg
+                  className="animate-spin w-5 h-5"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <circle
+                    className="opacity-25"
+                    cx="12"
+                    cy="12"
+                    r="10"
+                    stroke="currentColor"
+                    strokeWidth="4"
+                  />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8v8z"
+                  />
+                </svg>
+                Processing...
+              </span>
+            ) : (
+              "Confirm Purchase →"
+            )}
+          </button>
+
+          <button
+            onClick={() => navigate(-1)}
+            disabled={loading}
+            className="w-full py-4 rounded-2xl font-semibold text-white/60 text-sm
+              bg-white/[0.04] border border-white/10
+              hover:bg-white/[0.07] hover:text-white/80
+              disabled:opacity-40 transition-all"
+          >
+            Cancel
+          </button>
         </div>
       </div>
-
-      <button
-        onClick={confirmPurchase}
-        disabled={loading}
-        className="w-full bg-green-600 text-white p-3 rounded-lg font-semibold disabled:opacity-50 mb-3"
-      >
-        {loading ? "Processing..." : "Confirm Purchase"}
-      </button>
-
-      <button
-        onClick={() => navigate(-1)}
-        className="w-full bg-gray-200 text-gray-700 p-3 rounded-lg font-semibold"
-      >
-        Cancel
-      </button>
     </div>
   );
 };
