@@ -1,16 +1,118 @@
-# React + Vite
+# ZenSpace
+### A Wellness & Productivity Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+ZenSpace is a modern, all-in-one wellness and productivity dashboard designed to help users stay focused, organized, and mentally balanced. It combines task management, focus tools, and mindfulness features into a clean, responsive interface.
 
-Currently, two official plugins are available:
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Live Demo
 
-## React Compiler
+https://zenspace-smoky.vercel.app
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Overview
 
-## Expanding the ESLint configuration
+ZenSpace is built to solve a simple problem:
+Staying productive without burning out.
+Instead of separating productivity and wellness, ZenSpace blends both into a single experience - helping users manage tasks while also taking care of their mental state.
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Features
+
+### Core Productivity
+
+1. Task Manager (CRUD)
+   Add, delete, and manage tasks
+2. Focus Timer
+   Helps maintain deep work sessions
+3. Stats Dashboard
+   Visual progress tracking
+
+### Wellness & Mindfulness
+
+1. Breathing Timer
+   Guided breathing for relaxation
+2. Mood Tracker
+   Log and monitor emotional state
+3. Quote Card
+   Daily motivational quotes
+4. Reflection Card
+   Space for journaling thoughts
+
+### UI/UX Highlights
+
+1. Glassmorphism-style cards
+2. Smooth animations using Framer Motion
+3. Clean, modern layout
+4. Fully responsive (mobile, tablet, desktop)
+
+## Tech Stack
+
+- Frontend: React
+- Build Tool: Vite
+- Styling: TailwindCSS
+- Animations: Framer Motion
+- State Management: React Hooks (useState, useEffect)
+- Storage: LocalStorage (for persistence)
+
+
+## Installation & Setup
+
+1. Clone the repository:
+   git clone https://github.com/your-username/zenspace.git
+
+2. Navigate into the project:
+   cd zenspace
+
+3. Install dependencies:
+   npm install
+
+4. Start development server:
+   npm run dev
+
+
+## Deployment
+
+ZenSpace is ready for deployment on:
+- Vercel (recommended)
+- Netlify
+
+### Steps (Vercel):
+
+1. Push project to GitHub
+2. Import repository into Vercel
+3. Deploy
+
+
+## Key Learnings
+
+This project demonstrates:
+- Building a multi-feature dashboard
+- Component-based architecture in React
+- Managing local state and persistence
+- Creating polished UI with TailwindCSS
+- Implementing smooth animations with Framer Motion
+
+## Future Improvements
+
+1. User authentication (login/signup)
+2. Backend integration (save user data)
+3. Advanced analytics dashboard
+4. Goal tracking system
+5. Dark/light mode toggle
+6. Notifications & reminders
+7. Convert into an install-able app
+
+## Contributing
+
+Contributions, ideas, and feedback are welcome.
+
+## License
+
+This project is open-source and available under the MIT License.
+
+## Author
+
+Built by Michael Akinyemi
+Frontend Developer
+
+## Final Note
+ZenSpace is more than just a project — it represents the balance between productivity and well-being.
+A reminder that building things should not come at the cost of mental health.
