@@ -1,4 +1,5 @@
-# ZenSpace — Wellness & Productivity Dashboard
+# ZenSpace
+## Wellness & Productivity Dashboard
 
 ZenSpace is a modern, all-in-one wellness and productivity dashboard designed to help users stay focused, organized, and mentally balanced. It combines task management, focus tools, and mindfulness features into a clean, responsive interface.
 
@@ -11,7 +12,7 @@ https://zenspace-smoky.vercel.app/
 
 ZenSpace is built to solve a simple problem:
 Staying productive without burning out.
-Instead of separating productivity and wellness, ZenSpace blends both into a single experience — helping users manage tasks while also taking care of their mental state.
+Instead of separating productivity and wellness, ZenSpace blends both into a single experience - helping users manage tasks while also taking care of their mental state.
 
 ## Features
 
@@ -44,12 +45,12 @@ Instead of separating productivity and wellness, ZenSpace blends both into a sin
 
 ## Tech Stack
 
-Frontend: React
-Build Tool: Vite
-Styling: TailwindCSS
-Animations: Framer Motion
-State Management: React Hooks (useState, useEffect)
-Storage: LocalStorage (for persistence)
+- Frontend: React
+- Build Tool: Vite
+- Styling: TailwindCSS
+- Animations: Framer Motion
+- State Management: React Hooks (useState, useEffect)
+- Storage: LocalStorage (for persistence)
 
 
 ## Installation & Setup
@@ -70,8 +71,8 @@ Storage: LocalStorage (for persistence)
 ## Deployment
 
 ZenSpace is ready for deployment on:
-Vercel (recommended)
-Netlify
+- Vercel (recommended)
+- Netlify
 
 ### Steps (Vercel):
 
