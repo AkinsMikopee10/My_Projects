@@ -1,5 +1,5 @@
 # ZenSpace
-### Wellness & Productivity Dashboard
+### A Wellness & Productivity Dashboard
 
 ZenSpace is a modern, all-in-one wellness and productivity dashboard designed to help users stay focused, organized, and mentally balanced. It combines task management, focus tools, and mindfulness features into a clean, responsive interface.
 
