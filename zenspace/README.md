@@ -1,12 +1,12 @@
 # ZenSpace
-## Wellness & Productivity Dashboard
+### Wellness & Productivity Dashboard
 
 ZenSpace is a modern, all-in-one wellness and productivity dashboard designed to help users stay focused, organized, and mentally balanced. It combines task management, focus tools, and mindfulness features into a clean, responsive interface.
 
 
 ## Live Demo
 
-https://zenspace-smoky.vercel.app/
+https://zenspace-smoky.vercel.app
 
 ## Overview
 
@@ -61,7 +61,7 @@ Instead of separating productivity and wellness, ZenSpace blends both into a sin
 2. Navigate into the project:
    cd zenspace
 
-3. nstall dependencies:
+3. Install dependencies:
    npm install
 
 4. Start development server:
@@ -98,7 +98,7 @@ This project demonstrates:
 4. Goal tracking system
 5. Dark/light mode toggle
 6. Notifications & reminders
-7. convert into an install-able app
+7. Convert into an install-able app
 
 ## Contributing
 
