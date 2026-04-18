@@ -51,24 +51,6 @@ Animations: Framer Motion
 State Management: React Hooks (useState, useEffect)
 Storage: LocalStorage (for persistence)
 
-## Project Structure
-src/
-│
-├── components/
-│   ├── Header
-│   ├── Sidebar
-│   ├── DashboardGrid
-│   ├── TaskList
-│   ├── FocusTimer
-│   ├── BreathingTimer
-│   ├── MoodTracker
-│   ├── QuoteCard
-│   └── ReflectionCard
-│
-│
-├── App.jsx
-└── main.jsx
-
 
 ## Installation & Setup
 
