@@ -2,13 +2,66 @@ import { useEffect, useState, useRef } from "react";
 import { useParams, useNavigate, Navigate } from "react-router-dom";
 import { api } from "../utils/api";
 
-const typeIcons = {
-  funding: "💰",
-  airtime: "📞",
-  data: "📶",
-  cable: "📺",
-  electricity: "💡",
+const typeConfig = {
+  funding: {
+    icon: "💰",
+    label: "Wallet Funding",
+    bg: "bg-green-400/10",
+    text: "text-green-400",
+    border: "border-green-400/20",
+  },
+  airtime: {
+    icon: "📞",
+    label: "Airtime",
+    bg: "bg-blue-400/10",
+    text: "text-blue-400",
+    border: "border-blue-400/20",
+  },
+  data: {
+    icon: "📶",
+    label: "Data Bundle",
+    bg: "bg-brand-primary/10",
+    text: "text-brand-primary",
+    border: "border-brand-primary/20",
+  },
+  cable: {
+    icon: "📺",
+    label: "Cable TV",
+    bg: "bg-orange-400/10",
+    text: "text-orange-400",
+    border: "border-orange-400/20",
+  },
+  electricity: {
+    icon: "⚡",
+    label: "Electricity",
+    bg: "bg-yellow-400/10",
+    text: "text-yellow-400",
+    border: "border-yellow-400/20",
+  },
 };
+
+const statusConfig = {
+  successful: {
+    text: "text-brand-accent",
+    dot: "bg-brand-accent",
+    label: "Successful",
+  },
+  pending: { text: "text-yellow-400", dot: "bg-yellow-400", label: "Pending" },
+  failed: { text: "text-red-400", dot: "bg-red-400", label: "Failed" },
+};
+
+const Row = ({ label, value, mono = false, accent = false }) => (
+  <div className="flex justify-between items-start gap-4 py-3.5 border-b border-white/5 last:border-0">
+    <span className="text-white/40 text-sm flex-shrink-0">{label}</span>
+    <span
+      className={`text-sm text-right break-all
+      ${mono ? "font-mono text-white/60 text-xs" : "font-semibold"}
+      ${accent ? "text-brand-accent" : "text-white"}`}
+    >
+      {value}
+    </span>
+  </div>
+);
 
 const Receipt = () => {
   const { id } = useParams();
@@ -17,6 +70,7 @@ const Receipt = () => {
   const [transaction, setTransaction] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const fetchTransaction = async () => {
@@ -32,201 +86,248 @@ const Receipt = () => {
     fetchTransaction();
   }, [id]);
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = () => window.print();
+
+  const copyToken = (token) => {
+    navigator.clipboard.writeText(token);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
   };
 
-  if (loading) return <div className="p-6 text-center">Loading receipt...</div>;
-
-  if (error) {
+  if (loading)
     return (
-      <div className="p-6 text-center">
-        <p className="text-red-600 mb-4">{error}</p>
+      <div className="min-h-screen bg-brand-dark flex items-center justify-center">
+        <svg
+          className="animate-spin w-6 h-6 text-brand-primary mr-3"
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <circle
+            className="opacity-25"
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+          />
+          <path
+            className="opacity-75"
+            fill="currentColor"
+            d="M4 12a8 8 0 018-8v8z"
+          />
+        </svg>
+        <span className="text-white/40 text-sm">Loading receipt...</span>
+      </div>
+    );
+
+  if (error)
+    return (
+      <div className="min-h-screen bg-brand-dark flex flex-col items-center justify-center px-5 gap-4">
+        <div className="flex items-start gap-3 bg-red-500/10 border border-red-500/20 rounded-2xl p-4 w-full max-w-sm">
+          <span className="text-red-400 text-lg">⚠</span>
+          <p className="text-red-400 text-sm">{error}</p>
+        </div>
         <button
           onClick={() => navigate("/transactions")}
-          className="text-blue-600 font-semibold"
+          className="text-brand-primary text-sm font-semibold"
         >
-          Back to Transactions
+          ← Back to Transactions
         </button>
       </div>
     );
-  }
 
   if (!transaction) return <Navigate to="/transactions" replace />;
 
   const { type, amount, status, reference, createdAt, metadata } = transaction;
+  const cfg = typeConfig[type] || {
+    icon: "💳",
+    label: type,
+    bg: "bg-white/10",
+    text: "text-white/60",
+    border: "border-white/10",
+  };
+  const stat = statusConfig[status] || statusConfig.failed;
   const isElectricity = type === "electricity";
-  const isSuccess = status === "successful";
+  const electricityToken = metadata?.apiResponse?.token;
+  const electricityUnits = metadata?.apiResponse?.units;
 
   return (
     <>
-      {/* Print styles */}
       <style>{`
         @media print {
           .no-print { display: none !important; }
-          body { background: white; }
+          body { background: white !important; color: black !important; }
+          .print-card { border: 1px solid #ddd !important; background: white !important; }
         }
       `}</style>
 
-      <div className="p-6">
-        {/* Header — hidden on print */}
-        <div className="flex items-center mb-6 no-print">
+      <div className="min-h-screen bg-brand-dark font-sans relative overflow-hidden">
+        {/* Background orbs */}
+        <div className="absolute top-[-80px] left-[-60px] w-72 h-72 rounded-full bg-brand-primary opacity-10 blur-3xl pointer-events-none no-print" />
+        <div className="absolute bottom-[-60px] right-[-60px] w-64 h-64 rounded-full bg-brand-accent opacity-10 blur-3xl pointer-events-none no-print" />
+
+        {/* Header */}
+        <div className="relative z-10 flex items-center gap-3 px-5 pt-12 pb-6 no-print">
           <button
             onClick={() => navigate("/transactions")}
-            className="text-gray-500 mr-3 text-xl"
+            className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-white/70 hover:bg-white/10 hover:text-white transition-all"
           >
             ←
           </button>
-          <h1 className="text-xl font-bold">Receipt</h1>
+          <div>
+            <h1 className="font-display text-lg font-bold text-white leading-tight">
+              Receipt
+            </h1>
+            <p className="text-xs text-white/40">Transaction details</p>
+          </div>
         </div>
 
-        {/* Receipt Card */}
-        <div ref={receiptRef} className="border rounded-2xl p-6 space-y-4">
-          {/* Top */}
-          <div className="text-center">
-            <div className="text-5xl mb-2">{typeIcons[type] || "💳"}</div>
-            <h2 className="text-lg font-bold capitalize">{type} Purchase</h2>
-            <p
-              className={`text-sm font-semibold mt-1 ${
-                isSuccess
-                  ? "text-green-600"
-                  : status === "pending"
-                    ? "text-yellow-500"
-                    : "text-red-500"
-              }`}
+        <div className="relative z-10 px-5 pb-10 animate-slideUp">
+          {/* Receipt card */}
+          <div
+            ref={receiptRef}
+            className="print-card bg-white/[0.04] border border-white/10 rounded-2xl overflow-hidden mb-4"
+          >
+            {/* Hero */}
+            <div
+              className="border-b border-white/10 px-5 py-6 text-center"
+              style={{
+                background:
+                  "linear-gradient(to bottom right, rgba(108,99,255,0.12), rgba(0,212,170,0.06))",
+              }}
             >
-              {status.toUpperCase()}
-            </p>
-            <p className="text-2xl font-bold mt-2">
-              ₦{amount.toLocaleString()}
-            </p>
-          </div>
-
-          <hr />
-
-          {/* Electricity Token — shown prominently */}
-          {isElectricity && metadata?.apiResponse?.token && (
-            <div className="bg-yellow-50 border-2 border-yellow-400 p-4 rounded-xl text-center">
-              <p className="text-sm text-yellow-600 font-semibold mb-1">
-                Electricity Token
+              {/* BetaPlug brand — visible on print */}
+              <p className="font-display text-xs text-white/20 uppercase tracking-widest mb-4">
+                BetaPlug Receipt
               </p>
-              <p className="text-xl font-bold tracking-widest text-yellow-800">
-                {metadata.apiResponse.token}
+
+              <div
+                className={`w-14 h-14 rounded-2xl ${cfg.bg} border ${cfg.border} flex items-center justify-center text-2xl mx-auto mb-3`}
+              >
+                {cfg.icon}
+              </div>
+
+              <p className={`text-sm font-bold mb-1 ${cfg.text}`}>
+                {cfg.label}
               </p>
-              {metadata?.apiResponse?.units && (
-                <p className="text-sm text-yellow-600 mt-1">
-                  {metadata.apiResponse.units} units
-                </p>
-              )}
-            </div>
-          )}
-
-          {/* Transaction Details */}
-          <div className="space-y-3">
-            <div className="flex justify-between">
-              <span className="text-gray-500 text-sm">Reference</span>
-              <span className="font-semibold text-xs text-right max-w-xs break-all">
-                {reference}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-gray-500 text-sm">Date</span>
-              <span className="font-semibold text-sm">
-                {new Date(createdAt).toLocaleString()}
-              </span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-gray-500 text-sm">Type</span>
-              <span className="font-semibold text-sm capitalize">{type}</span>
-            </div>
-
-            <div className="flex justify-between">
-              <span className="text-gray-500 text-sm">Amount</span>
-              <span className="font-semibold text-sm">
+              <p className="font-display text-3xl font-bold text-white mb-2">
                 ₦{amount.toLocaleString()}
+              </p>
+              <span
+                className={`inline-flex items-center gap-1.5 text-xs font-bold ${stat.text}`}
+              >
+                <span className={`w-1.5 h-1.5 rounded-full ${stat.dot}`} />
+                {stat.label}
               </span>
             </div>
 
-            {/* Airtime / Data fields */}
-            {metadata?.phone && (
-              <div className="flex justify-between">
-                <span className="text-gray-500 text-sm">Phone</span>
-                <span className="font-semibold text-sm">{metadata.phone}</span>
+            {/* Electricity token — hero treatment */}
+            {isElectricity && electricityToken && (
+              <div className="border-b border-white/10 px-5 py-5 bg-yellow-400/5">
+                <p className="text-yellow-400/60 text-xs uppercase tracking-widest text-center mb-3">
+                  Electricity Token
+                </p>
+                <div
+                  className="bg-yellow-400/10 border-2 border-yellow-400/30 rounded-2xl px-4 py-4 text-center relative"
+                  style={{
+                    backgroundImage:
+                      "repeating-linear-gradient(0deg,rgba(234,179,8,0.03) 0,rgba(234,179,8,0.03) 1px,transparent 0,transparent 20px),repeating-linear-gradient(90deg,rgba(234,179,8,0.03) 0,rgba(234,179,8,0.03) 1px,transparent 0,transparent 20px)",
+                  }}
+                >
+                  <p className="font-display text-xl font-bold tracking-[0.2em] text-yellow-300 break-all mb-1">
+                    {electricityToken}
+                  </p>
+                  {electricityUnits && (
+                    <p className="text-yellow-400/60 text-xs">
+                      {electricityUnits} units
+                    </p>
+                  )}
+                </div>
+                <button
+                  onClick={() => copyToken(electricityToken)}
+                  className="flex items-center gap-2 mx-auto mt-3 bg-yellow-400/10 border border-yellow-400/20
+                    text-yellow-300 text-xs font-semibold px-4 py-2 rounded-xl
+                    hover:bg-yellow-400/20 active:scale-95 transition-all no-print"
+                >
+                  {copied ? "✓ Copied!" : "📋 Copy Token"}
+                </button>
               </div>
             )}
 
-            {metadata?.network && (
-              <div className="flex justify-between">
-                <span className="text-gray-500 text-sm">Network</span>
-                <span className="font-semibold text-sm">
-                  {metadata.network}
-                </span>
-              </div>
-            )}
+            {/* Details */}
+            <div className="px-5 py-2">
+              <Row label="Reference" value={reference} mono />
+              <Row
+                label="Date"
+                value={new Date(createdAt).toLocaleString("en-NG", {
+                  day: "numeric",
+                  month: "short",
+                  year: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              />
+              <Row label="Amount" value={`₦${amount.toLocaleString()}`} />
 
-            {/* Electricity fields */}
-            {metadata?.meterNumber && (
-              <div className="flex justify-between">
-                <span className="text-gray-500 text-sm">Meter Number</span>
-                <span className="font-semibold text-sm">
-                  {metadata.meterNumber}
-                </span>
-              </div>
-            )}
+              {/* Airtime / Data */}
+              {metadata?.phone && <Row label="Phone" value={metadata.phone} />}
+              {metadata?.network && (
+                <Row label="Network" value={metadata.network} />
+              )}
+              {metadata?.plan && (
+                <Row
+                  label="Plan"
+                  value={metadata.plan?.planName || metadata.plan}
+                />
+              )}
 
-            {metadata?.meterType && (
-              <div className="flex justify-between">
-                <span className="text-gray-500 text-sm">Meter Type</span>
-                <span className="font-semibold text-sm capitalize">
-                  {metadata.meterType}
-                </span>
-              </div>
-            )}
+              {/* Cable */}
+              {metadata?.smartCardNumber && (
+                <Row label="Smart Card No." value={metadata.smartCardNumber} />
+              )}
 
-            {metadata?.providerCode && (
-              <div className="flex justify-between">
-                <span className="text-gray-500 text-sm">Provider</span>
-                <span className="font-semibold text-sm">
-                  {metadata.providerCode}
-                </span>
-              </div>
-            )}
+              {/* Electricity */}
+              {metadata?.meterNumber && (
+                <Row label="Meter Number" value={metadata.meterNumber} />
+              )}
+              {metadata?.meterType && (
+                <Row label="Meter Type" value={metadata.meterType} />
+              )}
+              {metadata?.providerCode && (
+                <Row label="Provider" value={metadata.providerCode} />
+              )}
 
-            {/* Cable fields */}
-            {metadata?.smartCardNumber && (
-              <div className="flex justify-between">
-                <span className="text-gray-500 text-sm">Smart Card No.</span>
-                <span className="font-semibold text-sm">
-                  {metadata.smartCardNumber}
-                </span>
-              </div>
-            )}
+              <Row label="Status" value={stat.label} accent />
+            </div>
+
+            {/* Footer */}
+            <div className="border-t border-white/5 px-5 py-4 text-center">
+              <p className="text-white/20 text-xs">
+                Thank you for using BetaPlug · Your Plug for Better Value
+              </p>
+            </div>
           </div>
 
-          <hr />
-
-          {/* Footer */}
-          <p className="text-center text-xs text-gray-400">
-            Thank you for using our service
-          </p>
-        </div>
-
-        {/* Action Buttons — hidden on print */}
-        <div className="mt-6 space-y-3 no-print">
-          <button
-            onClick={handlePrint}
-            className="w-full bg-blue-600 text-white p-3 rounded-lg font-semibold"
-          >
-            🖨️ Print / Save Receipt
-          </button>
-          <button
-            onClick={() => navigate("/transactions")}
-            className="w-full bg-gray-200 text-gray-700 p-3 rounded-lg font-semibold"
-          >
-            Back to Transactions
-          </button>
+          {/* Action buttons */}
+          <div className="space-y-3 no-print">
+            <button
+              onClick={handlePrint}
+              className="w-full py-4 rounded-2xl font-display font-bold text-white text-base
+                bg-gradient-to-r from-brand-primary to-brand-accent
+                hover:opacity-90 active:scale-[0.98] transition-all
+                shadow-lg shadow-brand-primary/25"
+            >
+              🖨️ Print / Save Receipt
+            </button>
+            <button
+              onClick={() => navigate("/transactions")}
+              className="w-full py-4 rounded-2xl font-semibold text-white/60 text-sm
+                bg-white/[0.04] border border-white/10
+                hover:bg-white/[0.07] hover:text-white/80 transition-all"
+            >
+              ← Back to Transactions
+            </button>
+          </div>
         </div>
       </div>
     </>
