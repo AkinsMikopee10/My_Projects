@@ -11,6 +11,7 @@ require("./models/UserJobMeta");
 
 // Routes
 const authRoutes = require("./routes/auth");
+const jobRoutes = require("./routes/jobs");
 
 // Middleware
 const errorHandler = require("./middleware/errorHandler");
@@ -33,6 +34,7 @@ app.get("/api/health", (req, res) => {
 
 // API routes
 app.use("/api/auth", authRoutes);
+app.use("/api/jobs", jobRoutes);
 
 // Cron — fetch jobs every hour
 cron.schedule("0 * * * *", async () => {
