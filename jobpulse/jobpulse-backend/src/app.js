@@ -1,6 +1,8 @@
 const express = require("express");
 const cors = require("cors");
 const Job = require("./models/Job");
+const cron = require("node-cron");
+const { aggregateJobs } = require("./services/jobAggregator");
 
 const app = express();
 
@@ -31,6 +33,11 @@ app.get("/api/test-schema", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+cron.schedule("0 * * * *", async () => {
+  console.log("⏰ Cron triggered: fetching new jobs...");
+  await aggregateJobs();
 });
 
 // Placeholder — routes will be added here Day 5+
