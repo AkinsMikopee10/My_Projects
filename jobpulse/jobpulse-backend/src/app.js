@@ -1,16 +1,21 @@
 const express = require("express");
 const cors = require("cors");
-const Job = require("./models/Job");
 const cron = require("node-cron");
 const { aggregateJobs } = require("./services/jobAggregator");
-
-const app = express();
 
 // Models (register on startup)
 require("./models/Job");
 require("./models/User");
 require("./models/Application");
 require("./models/UserJobMeta");
+
+// Routes
+const authRoutes = require("./routes/auth");
+
+// Middleware
+const errorHandler = require("./middleware/errorHandler");
+
+const app = express();
 
 // Middleware
 app.use(
@@ -26,22 +31,16 @@ app.get("/api/health", (req, res) => {
   res.json({ status: "ok", message: "JobPulse API is running" });
 });
 
-app.get("/api/test-schema", async (req, res) => {
-  try {
-    const count = await Job.countDocuments();
-    res.json({ success: true, jobCount: count });
-  } catch (err) {
-    res.status(500).json({ error: err.message });
-  }
-});
+// API routes
+app.use("/api/auth", authRoutes);
 
+// Cron — fetch jobs every hour
 cron.schedule("0 * * * *", async () => {
-  console.log("⏰ Cron triggered: fetching new jobs...");
+  console.log("⏰ Cron: fetching new jobs...");
   await aggregateJobs();
 });
 
-// Placeholder — routes will be added here Day 5+
-// app.use('/api/jobs', jobRoutes);
-// app.use('/api/auth', authRoutes);
+// Global error handler — must be last
+app.use(errorHandler);
 
 module.exports = app;

@@ -73,13 +73,12 @@ const UserSchema = new mongoose.Schema(
 
 // ── Password Hashing ─────────────────────────────────────────
 // Runs BEFORE saving — converts plain text to hash
-UserSchema.pre("save", async function (next) {
+UserSchema.pre("save", async function () {
   // Only hash if password was changed (not on profile updates)
-  if (!this.isModified("password")) return next();
+  if (!this.isModified("password")) return;
 
   const salt = await bcrypt.genSalt(10); // 10 = cost factor (higher = slower = safer)
   this.password = await bcrypt.hash(this.password, salt);
-  next();
 });
 
 // ── Instance Method ──────────────────────────────────────────
@@ -89,7 +88,6 @@ UserSchema.methods.matchPassword = async function (enteredPassword) {
 };
 
 // ── Indexes ──────────────────────────────────────────────────
-UserSchema.index({ email: 1 }); // Fast login lookup
 UserSchema.index({ skills: 1 }); // Future: match users to jobs
 
 module.exports = mongoose.model("User", UserSchema);
